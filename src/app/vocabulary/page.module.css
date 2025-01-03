@@ -1,0 +1,21 @@
+.headContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-end;
+  width: 83.33vw;
+  height: 15vh;
+  margin-left: 16.66vw;
+  padding: 1rem;
+  background-color: var(--pale-blue);
+}
+
+.boardContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 16.66vw;
+  width: 66.66vw;
+  height: 85vh;
+}

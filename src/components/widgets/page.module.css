@@ -1,0 +1,3 @@
+.peer:checked ~ peer-checked:bg-dark-blue {
+  background-color: var(--dark-blue);
+}

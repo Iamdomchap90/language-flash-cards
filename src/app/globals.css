@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Roboto+Mono:wght@300&display=swap');
+/*
+Sky Blue: #87CEEB
+Light Sky Blue: #B0E2FF
+Arctic White: #F0F8FF
+Light Gray: #D3D3D3
+Pale Blue: #AFEEEE
+ */
+:root {
+  --sky-blue: #87CEEB;
+  --light-sky-blue: #B0E2FF;
+  --arctic-white: #F0F8FF;
+  --light-gray: #D3D3D3;
+  --pale-blue: #AFEEEE;
+  --dark-blue: #001F3F;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 0, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+    --tw-bg-opacity: 1;
+  }
+}
+
+.bg-sky-blue {
+  background-colour: var(--sky-blue);
+}
+
+.bg-light-sky-blue {
+  background-color: var(--light-sky-blue);
+}
+.bg-arctic-white {
+  background-color: var(--arctic-white);
+}
+.border-light-gray {
+  border-color: var(--light-gray);
+}
+.bg-light-gray {
+  background-color: var(--light-gray);
+}
+.bg-pale-blue {
+  background-color: var(--pale-blue);
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  margin-left: 0;
+  background-color: var(--arctic-white);
+}
+
+.header-text {
+  font-family: 'Montserrat', serif;
+  font-size: 1.5rem;
+}
+
+.long-text {
+  font-family: 'Roboto mono', monospace;
+  font-size: 1rem;
+}
+
+.menu-container{
+  height: 100vh;
+}

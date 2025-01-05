@@ -11,12 +11,12 @@ Light Gray: #D3D3D3
 Pale Blue: #AFEEEE
  */
 :root {
-  --sky-blue: #87CEEB;
-  --light-sky-blue: #B0E2FF;
-  --arctic-white: #F0F8FF;
-  --light-gray: #D3D3D3;
-  --pale-blue: #AFEEEE;
-  --dark-blue: #001F3F;
+  --sky-blue: #87ceeb;
+  --light-sky-blue: #b0e2ff;
+  --arctic-white: #f0f8ff;
+  --light-gray: #d3d3d3;
+  --pale-blue: #afeeee;
+  --dark-blue: #001f3f;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -64,6 +64,38 @@ body {
   font-size: 1rem;
 }
 
-.menu-container{
+.feedbackText {
+  font-size: clamp(0.1rem, 1.2vw, 0.3rem);
+  line-height: 1.2;
+  word-wrap: break-word;
+  padding: 0px 5px;
+}
+
+.menu-container {
   height: 100vh;
+}
+
+.minimiserButtonContainer {
+  height: 1vh;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.minimiserButton {
+  margin: 2px;
+  height: 8px;
+  width: 8px;
+  text-align: center;
+  line-height: 8px;
+  font-size: 8px;
+  cursor: pointer;
+}
+
+.incorrect {
+  background-color: red !important;
+}
+
+.correct {
+  background-color: #2ecc71 !important;
 }

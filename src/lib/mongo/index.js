@@ -1,9 +1,9 @@
-import {MongoClient} from 'mongodb';
+import { MongoClient } from 'mongodb';
 
 const URI = process.env.MONGODB_URI;
 const options = {};
 
-if (!URI) throw new error ('Please add your Mongo URI to .env.local')
+if (!URI) throw new error('Please add your Mongo URI to .env.local');
 
 let client = new MongoClient(URI, options);
 let clientPromise;

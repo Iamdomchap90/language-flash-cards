@@ -1,4 +1,4 @@
-import clientPromise from '.'
+import clientPromise from '.';
 
 let db;
 let vocab;
@@ -6,17 +6,17 @@ let vocab;
 async function init() {
   if (db) return;
   try {
-    client = await _mongoClientPromise
-    db = await client.db()
+    client = await _mongoClientPromise;
+    db = await client.db();
     vocabCards = await db.collection('vocab_cards');
   } catch (error) {
     throw new Error('Failed to connect to database.');
   }
 }
 
-(async() => {
+(async () => {
   await init();
-}) ()
+})();
 
 export async function getVocabCards() {
   try {
@@ -24,13 +24,11 @@ export async function getVocabCards() {
     const result = await vocabCards
       .find({})
       .limit(10)
-      .map(user => ({ ...user, _id: user._id.toString()}))
-      .toArray()
+      .map((user) => ({ ...user, _id: user._id.toString() }))
+      .toArray();
 
-      return { vocabs: result }
+    return { vocabs: result };
   } catch (error) {
-    return { error: 'Failed to fetch vocab cards!'}
+    return { error: 'Failed to fetch vocab cards!' };
   }
-};
-
-export default { getVocabCards };
+}

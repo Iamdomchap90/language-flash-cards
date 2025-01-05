@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  display:flex;
+  display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
@@ -15,7 +15,7 @@
 }
 
 .configContainer {
-  display:flex;
+  display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: flex-start;
@@ -24,7 +24,7 @@
   height: 50%;
 }
 
-.filterContainer{
+.filterContainer {
   display: flex;
   flex-direction: row;
   justify-content: center;

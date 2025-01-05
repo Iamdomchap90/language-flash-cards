@@ -1,4 +1,4 @@
-.headContainer{
+.headContainer {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -10,7 +10,7 @@
   background-color: var(--pale-blue);
 }
 
-.boardContainer{
+.boardContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;

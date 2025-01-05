@@ -7,7 +7,6 @@ const connect = async () => {
       useUnifiedTopology: true,
     });
   } catch (error) {
-
     throw new Error('Connection to database failed!');
   }
 };

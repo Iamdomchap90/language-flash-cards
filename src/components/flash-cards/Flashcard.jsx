@@ -22,7 +22,7 @@ const FlashCard = ({ card_data }) => {
   if (isAnswerCorrect === null) {
     feedbackMessage = (
       <button
-        className={`${styles.answerButton} primary`}
+        className={`${styles.answerButton} text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700`}
         onClick={handleCheckAnswerClick}
       >
         Check answer
@@ -45,28 +45,33 @@ const FlashCard = ({ card_data }) => {
       className={`${styles.cardContainer} ${feedbackStyling} ${isZoomed ? styles.zoomed : ''}`}
       onClick={handleCardClick}
     >
-      {isZoomed && (
-        <div className="minimiserButtonContainer">
-          <div
-            className="minimiserButton"
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent the card click event from firing
-              setIsZoomed(false);
-            }}
-          >
-            -
-          </div>
+      <div className="flex w-full justify-center">
+        {isZoomed && (
+          <div className="w-1/6"></div>
+        )}
+        <div className={`${styles.cardTextContainer} ${isZoomed && "w-4/6"}`}>
+          <p className={styles.cardText}>{displayText}</p>
         </div>
-      )}
-      <div className="justify-center w-full">
-        <p className={styles.cardText}>{displayText}</p>
+        {isZoomed && (
+          <div className="w-1/6 flex justify-end items-start">
+            <div
+              className="minimiserButton"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent the card click event from firing
+                setIsZoomed(false);
+              }}
+            >
+              -
+            </div>
+          </div>
+        )}
       </div>
       {isZoomed && (
         <>
           <div className={styles.answerContainer}>
             <input
               type="text"
-              className={`focus:ring-2 focus:ring-yellow-500 focus:outline-none focus:border-yellow focus:ring-offset-yellow ${styles.answerInput}`}
+              className={`bg-gray-50 border border-gray-300 text-gray-900 rounded-md focus:ring-blue-500 focus:outline-none block w-4/12 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${styles.answerInput}`}
               placeholder="Your translation..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -80,7 +85,6 @@ const FlashCard = ({ card_data }) => {
 };
 
 const FlashRow = ({ row_data }) => {
-  console.log('ROW DATA: ', row_data);
   return (
     <div className={styles.boardRowContainer}>
       {row_data.map((cardData, index) => (
@@ -93,7 +97,6 @@ const FlashRow = ({ row_data }) => {
 const FlashBoard = ({ data }) => {
   const numberOfRows = 3;
   const numberOfCardsPerRow = 3;
-  console.log('Flash Board data: ', data);
   return (
     <div className={styles.boardContainer}>
       {Array.from({ length: numberOfRows }).map((_, index) => {

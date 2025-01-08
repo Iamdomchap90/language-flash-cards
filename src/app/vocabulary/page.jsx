@@ -17,8 +17,6 @@ const Vocabulary = () => {
       throw new Error('Failed to fetch data');
     }
     const result = await response.json();
-    console.log('RESULT: ', result);
-    console.log('type: ', typeof result);
     setData(result);
 
     setIsLoading(false);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
 
-const FlashCard = ({ card_data }) => {
+const FlashCard = ({ cardData, cardIndex, onAnswerUpdate }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -10,13 +10,16 @@ const FlashCard = ({ card_data }) => {
     setIsZoomed(true);
   };
   const handleCheckAnswerClick = () => {
-    setIsAnswerCorrect(card_data.translationText === inputValue);
+    const isCorrect = cardData.translationText === inputValue;
+    const cardID = cardData._id;
+    setIsAnswerCorrect(isCorrect);
+    onAnswerUpdate(cardIndex, cardID, isCorrect);
   };
   const feedbackStyling =
     isAnswerCorrect === null ? '' : isAnswerCorrect ? 'correct' : 'incorrect';
   const displayText = isFlipped
-    ? card_data.translationText
-    : card_data.englishText;
+    ? cardData.translationText
+    : cardData.englishText;
 
   let feedbackMessage;
   if (isAnswerCorrect === null) {
@@ -35,7 +38,7 @@ const FlashCard = ({ card_data }) => {
   } else {
     feedbackMessage = (
       <p className="feedbackText">
-        Better luck next time. Correct answer is {card_data.translationText}.
+        Better luck next time. Correct answer is {cardData.translationText}.
       </p>
     );
   }
@@ -46,10 +49,8 @@ const FlashCard = ({ card_data }) => {
       onClick={handleCardClick}
     >
       <div className="flex w-full justify-center">
-        {isZoomed && (
-          <div className="w-1/6"></div>
-        )}
-        <div className={`${styles.cardTextContainer} ${isZoomed && "w-4/6"}`}>
+        {isZoomed && <div className="w-1/6"></div>}
+        <div className={`${styles.cardTextContainer} ${isZoomed && 'w-4/6'}`}>
           <p className={styles.cardText}>{displayText}</p>
         </div>
         {isZoomed && (
@@ -84,28 +85,82 @@ const FlashCard = ({ card_data }) => {
   );
 };
 
-const FlashRow = ({ row_data }) => {
+const FlashRow = ({ rowData, rowIndex, onAnswerUpdate, numCardsPerRow }) => {
   return (
     <div className={styles.boardRowContainer}>
-      {row_data.map((cardData, index) => (
-        <FlashCard key={index} card_data={cardData} />
-      ))}
+      {rowData.map((cardData, columnIndex) => {
+        const cardIdentifier = rowIndex * numCardsPerRow + columnIndex;
+        return (
+          <FlashCard
+            key={cardIdentifier}
+            cardData={cardData}
+            cardIndex={cardIdentifier}
+            onAnswerUpdate={onAnswerUpdate}
+          />
+        );
+      })}
     </div>
   );
 };
 
 const FlashBoard = ({ data }) => {
   const numberOfRows = 3;
-  const numberOfCardsPerRow = 3;
+  const numberOfColumns = 3;
+  const [errorCount, setErrorCount] = useState([0]);
+  const [answerCount, setAnswerCount] = useState([0]);
+  const [answerResults, setAnswerResults] = useState(
+    new Array(numberOfRows * numberOfColumns).fill(null)
+  );
+
+  const getUser = () => {
+    const user = sessionStorage.getItem('user'); // Example of accessing the logged-in user from sessionStorage
+    return user || 'guest'; // Default to 'guest' if no user found
+  };
+
+  function handleAnswerUpdate(cardIndex, cardID, isCorrect) {
+    setAnswerResults((prevResults) => {
+      const updatedResults = [...prevResults];
+      updatedResults[cardIndex] = {
+        cardID: cardID,
+        isCorrect: isCorrect,
+        user: getUser(),
+      };
+      return updatedResults;
+    });
+  }
+
+  useEffect(() => {
+    const errorCount = answerResults.filter(
+      (answer) => answer && answer.isCorrect === false
+    ).length;
+    setErrorCount(errorCount);
+    const answerCount = answerResults.filter((answer) => answer).length;
+    setAnswerCount(answerCount);
+  }, [answerResults]);
   return (
-    <div className={styles.boardContainer}>
-      {Array.from({ length: numberOfRows }).map((_, index) => {
-        const startIndex = index * numberOfCardsPerRow;
-        const endIndex = startIndex + numberOfCardsPerRow;
-        const rowData = data.slice(startIndex, endIndex);
-        return <FlashRow key={index} row_data={rowData} />;
-      })}
-    </div>
+    <>
+      <div className={styles.errorDisplayContainer}>
+        <div className={styles.errorDisplay}>
+          {errorCount} error{errorCount !== 1 && 's'} out of {answerCount}
+        </div>
+      </div>
+      <div className={styles.boardContainer}>
+        {Array.from({ length: numberOfRows }).map((_, index) => {
+          const startIndex = index * numberOfColumns;
+          const endIndex = startIndex + numberOfColumns;
+          const rowData = data.slice(startIndex, endIndex);
+          return (
+            <FlashRow
+              key={index}
+              rowData={rowData}
+              rowIndex={index}
+              onAnswerUpdate={handleAnswerUpdate}
+              numCardsPerRow={numberOfColumns}
+            />
+          );
+        })}
+      </div>
+    </>
   );
 };
 

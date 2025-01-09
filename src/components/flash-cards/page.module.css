@@ -33,7 +33,6 @@
   transform: translate(-50%, -50%) scale(5);
   transform-origin: center center;
   position: fixed;
-  /* display: block; */
   width: 20vh;
   height: 10vh;
   top: 50%;

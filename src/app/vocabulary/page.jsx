@@ -17,8 +17,6 @@ const Vocabulary = () => {
       throw new Error('Failed to fetch data');
     }
     const result = await response.json();
-    console.log('RESULT: ', result);
-    console.log('type: ', typeof result);
     setData(result);
 
     setIsLoading(false);
@@ -26,6 +24,10 @@ const Vocabulary = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleNextCards = () => {
+
+  };
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -41,7 +43,7 @@ const Vocabulary = () => {
         <h1 className="header-text">Learn most commonly used words</h1>
       </div>
       <div className={styles.boardContainer}>
-        <FlashBoard data={data} />
+        <FlashBoard data={data} updateNewCards={handleNextCards} />
       </div>
       <SidePanel />
     </>

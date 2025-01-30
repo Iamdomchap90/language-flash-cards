@@ -24,6 +24,22 @@ Pale Blue: #AFEEEE
   .btn {
     @apply py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg;
   }
+
+  .formSpacing {
+    @apply w-full relative pt-5 text-center;
+  }
+
+  .input {
+    @apply px-3 py-2 border border-gray-300 rounded-sm;
+  }
+
+  .authContainer {
+    @apply w-full mt-[calc(50vh-300px)] mx-auto my-auto max-w-[500px] p-8;
+  }
+
+  .modal {
+    @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[300px] bg-purple-500 z-[1000];
+  }
 }
 
 @media (prefers-color-scheme: dark) {

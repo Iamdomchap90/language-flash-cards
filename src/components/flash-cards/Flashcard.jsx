@@ -120,7 +120,7 @@ const FlashRow = ({
   );
 };
 
-const FlashBoard = ({ data }) => {
+const FlashBoard = ({ data, updateNewCards }) => {
   const numberOfRows = 3;
   const numberOfColumns = 3;
   const numberOfCards = numberOfRows * numberOfColumns;
@@ -155,6 +155,7 @@ const FlashBoard = ({ data }) => {
     setErrorCount(0);
     setAnswerCount(0);
     setAnswerResults(new Array(numberOfCards).fill(null));
+    updateNewCards();
   };
 
   const retryBoard = () => {
@@ -200,10 +201,7 @@ const FlashBoard = ({ data }) => {
         })}
       </div>
       {isModalOpen && (
-        <div
-          id="boardCompleteModal"
-          className="modal fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[300px] bg-purple-500 z-[1000]"
-        >
+        <div id="boardCompleteModal" className="modal">
           <div className="w-full h-[20px]">
             <span
               className="close-button float-right"

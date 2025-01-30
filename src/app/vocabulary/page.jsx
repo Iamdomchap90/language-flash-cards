@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import FlashBoard from '@/components/flash-cards/Flashcard';
 import SidePanel from '../side-panel/SidePanel';
 import styles from './page.module.css';
+import AuthArea from '@/components/auth-area/AuthArea';
 // import getVocabCards from '../../lib/mongo/vocabulary';
 
 const Vocabulary = () => {
@@ -25,9 +26,7 @@ const Vocabulary = () => {
     fetchData();
   }, []);
 
-  const handleNextCards = () => {
-
-  };
+  const handleNextCards = () => {};
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -39,8 +38,9 @@ const Vocabulary = () => {
 
   return (
     <>
-      <div className={styles.headContainer}>
+      <div className={`${styles.headContainer}`}>
         <h1 className="header-text">Learn most commonly used words</h1>
+        <AuthArea />
       </div>
       <div className={styles.boardContainer}>
         <FlashBoard data={data} updateNewCards={handleNextCards} />

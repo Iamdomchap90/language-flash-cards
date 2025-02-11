@@ -15,7 +15,8 @@ const Vocabulary = () => {
     setIsLoading(true);
     const response = await fetch('/api/vocab-cards');
     if (!response.ok) {
-      throw new Error('Failed to fetch data');
+      let errorResponse = await response.json();
+      throw new Error(errorResponse.error || 'Failed to fetch data');
     }
     const result = await response.json();
     setData(result);
@@ -43,7 +44,7 @@ const Vocabulary = () => {
         <AuthArea />
       </div>
       <div className={styles.boardContainer}>
-        <FlashBoard data={data} updateNewCards={handleNextCards} />
+        <FlashBoard data={data} updateNewCards={fetchData} />
       </div>
       <SidePanel />
     </>

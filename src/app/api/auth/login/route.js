@@ -16,9 +16,6 @@ export const POST = async (req, res) => {
   }
   const body = await req.json();
   const { username, password } = body || {};
-  console.log('username: ', username);
-  console.log('password: ', password);
-  console.log('BALLS! ');
 
   if (!username || !password) {
     return new Response(

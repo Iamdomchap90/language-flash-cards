@@ -1,28 +1,27 @@
-"use client";
-import { signIn } from "next-auth/react";
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+'use client';
+import { signIn } from 'next-auth/react';
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import Link from 'next/link';
 
-
 export default function logIn() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const result = await signIn("credentials", {
+    const result = await signIn('credentials', {
       redirect: false,
       username,
       password,
-      callbackUrl: "/vocabulary",
+      callbackUrl: '/vocabulary',
     });
     if (result?.error) {
-      alert("Invalid username or password.");
+      alert('Invalid username or password.');
     } else {
-      window.location.href = "/vocabulary";
+      window.location.href = '/vocabulary';
     }
   };
 
@@ -51,7 +50,9 @@ export default function logIn() {
           />
         </div>
         <div className="formSpacing">
-          <button className="btn" type="submit">Log in</button>
+          <button className="btn" type="submit">
+            Log in
+          </button>
         </div>
       </form>
 
@@ -60,7 +61,9 @@ export default function logIn() {
         <Link
           href="/auth/signup"
           className="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg"
-        >Sign up</Link>
+        >
+          Sign up
+        </Link>
         <button className="btn" onClick={() => signIn('google')}>
           <FontAwesomeIcon icon={faGoogle} className="mr-2 w-5 h-5" />
           Log in with Google

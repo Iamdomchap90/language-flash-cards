@@ -1,27 +1,27 @@
-"use client";
-import React, { useState } from "react";
-import Link from "next/link";
+'use client';
+import React, { useState } from 'react';
+import Link from 'next/link';
 
 export default function SignUp() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setSuccess(false);
-    
+
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError('Passwords do not match.');
       return;
     }
 
-    const response = await fetch("/api/auth/signup/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const response = await fetch('/api/auth/signup/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     });
 
@@ -29,7 +29,7 @@ export default function SignUp() {
       setSuccess(true);
     } else {
       const data = await response.json();
-      setError(data.error || "An unexpected error occurred.");
+      setError(data.error || 'An unexpected error occurred.');
     }
   };
 
@@ -68,18 +68,24 @@ export default function SignUp() {
           />
         </div>
         <div className="formSpacing">
-          <button className="btn" type="submit">Sign Up</button>
+          <button className="btn" type="submit">
+            Sign Up
+          </button>
         </div>
       </form>
       {error && <p className="text-red-500">{error}</p>}
-      {success &&
+      {success && (
         <div className="modal ">
-          <h2 className="mt-[90px] text-center header-text">Sign-up successful! You can now log in.</h2>
-          <div className="w-full formSpacing " >
-            <Link href="/auth/login" className="btn">Go to Log in</Link>
+          <h2 className="mt-[90px] text-center header-text">
+            Sign-up successful! You can now log in.
+          </h2>
+          <div className="w-full formSpacing ">
+            <Link href="/auth/login" className="btn">
+              Go to Log in
+            </Link>
           </div>
         </div>
-      }
+      )}
     </div>
   );
 }

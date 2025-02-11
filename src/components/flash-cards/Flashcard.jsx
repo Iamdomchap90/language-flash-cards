@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
 
@@ -123,58 +124,46 @@ const FlashRow = ({
 const FlashBoard = ({ data, updateNewCards }) => {
   const numberOfRows = 3;
   const numberOfColumns = 3;
-  const numberOfCards = numberOfRows * numberOfColumns;
-  const [errorCount, setErrorCount] = useState([0]);
-  const [answerCount, setAnswerCount] = useState([0]);
-  const [answerResults, setAnswerResults] = useState(
-    new Array(numberOfCards).fill(null)
-  );
+  const numberOfCards = Math.min(data.length, numberOfRows * numberOfColumns);
+  const [errorCount, setErrorCount] = useState(0);
+  const [answerCount, setAnswerCount] = useState(0);
   const [isBoardComplete, setIsBoardComplete] = useState(false);
   const [isBoardReset, setIsBoardReset] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
-  const getUser = () => {
-    const user = sessionStorage.getItem('user'); // Example of accessing the logged-in user from sessionStorage
-    return user || 'guest'; // Default to 'guest' if no user found
-  };
-
-  const handleAnswerUpdate = (cardIndex, cardID, isCorrect) => {
-    setAnswerResults((prevResults) => {
-      const updatedResults = [...prevResults];
-      updatedResults[cardIndex] = {
-        cardID: cardID,
-        isCorrect: isCorrect,
-        user: getUser(),
-        lastAttempted: new Date().toISOString(),
-      };
-      return updatedResults;
+  const handleAnswerUpdate = async (cardIndex, cardID, isCorrect) => {
+    const response = await fetch('/api/vocab-cards/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ cardIndex, cardID, isCorrect }),
     });
+    const data = await response.json();
+    setErrorCount(Number(errorCount) + Number(!isCorrect));
+    setAnswerCount(Number(answerCount) + 1);
   };
 
   const newBoard = () => {
     setErrorCount(0);
     setAnswerCount(0);
-    setAnswerResults(new Array(numberOfCards).fill(null));
     updateNewCards();
   };
 
   const retryBoard = () => {
-    setAnswerResults(new Array(numberOfCards).fill(null));
     setIsBoardReset(true);
     setIsModalOpen(false);
   };
 
   useEffect(() => {
-    const errorCount = answerResults.filter(
-      (answer) => answer && answer.isCorrect === false
-    ).length;
-    setErrorCount(errorCount);
-    const answerCount = answerResults.filter((answer) => answer).length;
-    setAnswerCount(answerCount);
-    setIsBoardComplete(answerCount === numberOfCards);
-    setIsModalOpen(answerCount === numberOfCards);
-    setIsBoardReset(false); // After checking first answer after reset.
-  }, [answerResults]);
+    if (isFirstRender) {
+      // Exit early on the first render
+      setIsFirstRender(false);
+      return;
+    }
+    setIsModalOpen(answerCount == numberOfCards);
+  }, [answerCount]);
 
   return (
     <>

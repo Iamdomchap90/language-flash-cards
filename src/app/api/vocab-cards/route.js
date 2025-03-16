@@ -7,10 +7,18 @@ import mongoose from 'mongoose';
 
 export const GET = async (request) => {
   try {
+    const { searchParams } = new URL(request.url);
+    const wordType = searchParams.get('wordType');
+    let baseFilter = { language: 'Russian' };
+
+    if (wordType) {
+      baseFilter['wordType'] = wordType;
+    }
+
     const userID = await getUserID();
     await connect();
     const randomVocabCards = await VocabCard.aggregate([
-      { $match: { language: 'Russian' } },
+      { $match: baseFilter },
       { $sample: { size: 9 } },
     ]);
 
@@ -19,16 +27,17 @@ export const GET = async (request) => {
         status: 200,
       });
     } else {
+      baseFilter['user'] = userID;
       const attemptedVocabCardIds = await UserVocabCardProgress.aggregate([
-        { $match: { user: userID } },
+        { $match: baseFilter },
         { $group: { _id: null, ids: { $addToSet: '$vocabCard' } } }, // Collect unique vocabCard IDs
         { $unwind: '$ids' }, // Flatten the ids array
         { $project: { _id: 0, vocabCard: '$ids' } }, // Rename field to vocabCard
       ]).then((results) => results.map((doc) => doc.vocabCard));
-
+      baseFilter['nextReviewedAt'] = { $lt: new Date() };
       const attemptedReviewVocabCardIds = await UserVocabCardProgress.aggregate(
         [
-          { $match: { user: userID, nextReviewedAt: { $lt: new Date() } } },
+          { $match: baseFilter },
           { $group: { _id: null, ids: { $addToSet: '$vocabCard' } } }, // Collect unique vocabCard IDs
           { $unwind: '$ids' }, // Flatten the ids array
           { $project: { _id: 0, vocabCard: '$ids' } }, // Rename field to vocabCard

@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import ToggleSwitch from '@/components/widgets/ToggleSwitch';
-import Button from '@/components/widgets/Button';
 
 const MatchConfig = () => {
   // Radio select for text entry, multiple choice
@@ -42,15 +41,12 @@ const MatchConfig = () => {
   );
 };
 
-const FilterContainer = () => {
+const FilterContainer = ({ filterCards, activeIndex }) => {
   // Radio select for verbs, nouns, adjectives, adverbs
-  const [selectedFilter, setSelectedFilter] = useState('all'); // Default selected Config
 
-  const handleFilterClick = (value) => {
-    setSelectedFilter(value);
+  const handleFilterClick = (buttonIndex, wordType) => {
+    filterCards(wordType, buttonIndex);
   };
-
-  useEffect(() => {}, [selectedFilter]);
 
   return (
     <div className={styles.configContainer}>
@@ -58,24 +54,31 @@ const FilterContainer = () => {
         <h2 className="long-text">Vocabulary filter</h2>
       </div>
       <div>
-        <Button onClick={handleFilterClick} value="nouns">
+        <button
+          className={activeIndex === 0 ? 'btn activeBtn' : 'btn'}
+          onClick={() => handleFilterClick(0, 'noun')}
+        >
           Nouns
-        </Button>
+        </button>
       </div>
       <div>
-        <Button onClick={handleFilterClick} value="verbs">
+        <button
+          className={activeIndex === 1 ? 'btn activeBtn' : 'btn'}
+          onClick={() => handleFilterClick(1, 'verb')}
+        >
           Verbs
-        </Button>
+        </button>
       </div>
     </div>
   );
 };
 
-const SidePanel = () => {
+const SidePanel = ({ filterCards, activeIndex }) => {
+  console.log('A filter Cards: ', filterCards);
   return (
     <div className={styles.panelContainer}>
       <MatchConfig />
-      <FilterContainer />
+      <FilterContainer filterCards={filterCards} activeIndex={activeIndex} />
     </div>
   );
 };

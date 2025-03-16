@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import FlashBoard from '@/components/flash-cards/Flashcard';
 import SidePanel from '../side-panel/SidePanel';
 import styles from './page.module.css';
@@ -10,19 +10,31 @@ const Vocabulary = () => {
   const [data, setData] = useState([]);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [activeButtonIndex, setActiveButtonIndex] = useState(null);
 
-  const fetchData = async () => {
-    setIsLoading(true);
-    const response = await fetch('/api/vocab-cards');
-    if (!response.ok) {
-      let errorResponse = await response.json();
-      throw new Error(errorResponse.error || 'Failed to fetch data');
-    }
-    const result = await response.json();
-    setData(result);
+  const fetchData = useCallback(
+    async (lexicalCategory = null, buttonIndex = null) => {
+      setIsLoading(true);
+      console.log('called with (FETCH DATA): ', lexicalCategory);
+      const lexicalCategoryParameter = lexicalCategory
+        ? `?wordType=${lexicalCategory}`
+        : '';
+      const response = await fetch(
+        '/api/vocab-cards' + lexicalCategoryParameter
+      );
+      if (!response.ok) {
+        let errorResponse = await response.json();
+        throw new Error(errorResponse.error || 'Failed to fetch data');
+      }
+      const result = await response.json();
+      setData(result);
+      setActiveButtonIndex(buttonIndex);
 
-    setIsLoading(false);
-  };
+      setIsLoading(false);
+    },
+    []
+  );
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -46,7 +58,7 @@ const Vocabulary = () => {
       <div className={styles.boardContainer}>
         <FlashBoard data={data} updateNewCards={fetchData} />
       </div>
-      <SidePanel />
+      <SidePanel filterCards={fetchData} activeIndex={activeButtonIndex} />
     </>
   );
 };

@@ -59,4 +59,4 @@ If guest user only random cards will be pulled through and no progress data will
 Nextauth.js is used to help manage the user login session. I have implemented a manual credential login option aswell if the user
 doesn't have one of the OAuth accounts listed. This 'ordinary' credential option means user objects with different structures. For example
 credential user will have a username where as google user will have just a name and the unique field of image. This image field will be used
-to differentiate between the two objects in shared space. 
+to differentiate between the two objects in shared space.

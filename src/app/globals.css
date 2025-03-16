@@ -25,6 +25,10 @@ Pale Blue: #AFEEEE
     @apply py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg;
   }
 
+  .activeBtn {
+    @apply bg-white text-black hover:bg-white;
+  }
+
   .formSpacing {
     @apply w-full relative pt-5 text-center;
   }

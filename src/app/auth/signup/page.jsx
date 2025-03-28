@@ -4,10 +4,13 @@ import Link from 'next/link';
 
 export default function SignUp() {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [success, setSuccess] = useState(false);
+  const emailRegex = /^\S+@\S+\.\S+$/;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,10 +22,15 @@ export default function SignUp() {
       return;
     }
 
-    const response = await fetch('/api/auth/signup/', {
+    if (emailError) {
+      setError('Give a valid email.');
+      return;
+    }
+
+    const response = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, password, email }),
     });
 
     if (response.ok) {
@@ -30,6 +38,16 @@ export default function SignUp() {
     } else {
       const data = await response.json();
       setError(data.error || 'An unexpected error occurred.');
+    }
+  };
+
+  const validateEmail = (dirtyEmail) => {
+    setEmail(dirtyEmail);
+
+    if (!emailRegex.test(dirtyEmail)) {
+      setEmailError('Invalid email format');
+    } else {
+      setEmailError('');
     }
   };
 
@@ -46,6 +64,19 @@ export default function SignUp() {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
+        </div>
+        <div className="flex flex-col items-center formSpacing">
+          <label className="w-full block text-left">Email</label>
+          <input
+            className="w-full input"
+            type="text"
+            value={email}
+            onChange={(e) => validateEmail(e.target.value)}
+            required
+          />
+          {emailError && (
+            <p className="w-full text-left text-red-500">{emailError}</p>
+          )}
         </div>
         <div className="flex flex-col items-center formSpacing">
           <label className="w-full block text-left">Password</label>

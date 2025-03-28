@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import Link from 'next/link';
 
-export default function logIn() {
+export default function LogIn() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 

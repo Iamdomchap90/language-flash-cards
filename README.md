@@ -36,6 +36,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 # Adding new Vocabulary
 
 There is an insert file command that can be modified to include new cards and then executed by running from within project root directory:
+
 node src/utils/insert-vocab-cards.js
 
 # Spaced Repetition vocabulary
@@ -60,3 +61,5 @@ Nextauth.js is used to help manage the user login session. I have implemented a 
 doesn't have one of the OAuth accounts listed. This 'ordinary' credential option means user objects with different structures. For example
 credential user will have a username where as google user will have just a name and the unique field of image. This image field will be used
 to differentiate between the two objects in shared space.
+
+The oAuth accounts will have a mongo db reference in the database also to help cache their stats whilst learning. This is created/retrieved in the utils/authOptions file.

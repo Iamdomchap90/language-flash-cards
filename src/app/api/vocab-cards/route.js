@@ -43,18 +43,28 @@ export const GET = async (request) => {
           { $project: { _id: 0, vocabCard: '$ids' } }, // Rename field to vocabCard
         ]
       ).then((results) => results.map((doc) => doc.vocabCard));
-      const notAttemptedVocabCards = await VocabCard.find({
+
+      const filterVocabCards = async (filter) => {
+        const query = {
+          language: 'Russian',
+          ...filter,
+        };
+
+        if (wordType) {
+          query.wordType = wordType;
+        }
+
+        return await VocabCard.find(query);
+      };
+
+      const notAttemptedVocabCards = await filterVocabCards({
         _id: { $nin: attemptedVocabCardIds }, // Cards whose ID is NOT in the attempted list
-        language: 'Russian',
-        wordType: wordType,
       });
 
-      const spacedRepetitionVocabCards = await VocabCard.find({
+      const spacedRepetitionVocabCards = await filterVocabCards({
         _id: {
           $in: attemptedReviewVocabCardIds,
         },
-        language: 'Russian',
-        wordType: wordType,
       });
 
       const reviewableVocabCards = [

@@ -36,54 +36,41 @@ const updateStreak = async (updateId, updateUser) => {
   yesterday.setDate(today.getDate() - 1);
 
   const results = await UserVocabCardProgress.find({ user: updateId })
-    .sort({ updatedAt: -1 }) // Sort by updatedAt descending (latest first)
-    .select('updatedAt') // Only fetch updatedAt field
-    .lean(); // Convert documents to plain objects
+    .sort({ updatedAt: -1 })
+    .select("updatedAt")
+    .lean();
 
   const recentDate = results.length > 0 ? new Date(results[0].updatedAt) : null;
-  console.log();
   // Reset time to 00:00:00 if there's a valid date
   recentDate?.setHours(0, 0, 0, 0);
 
-  console.log('RECENT DATE: ', recentDate);
-  if (
-    recentDate.getTime() === today.getTime() &&
-    updateUser.Russian.activeStreak !== 0
-  ) {
-    console.log('1');
-  } else if (recentDate.getTime() < yesterday.getTime()) {
-    console.log('2 HIT');
-    updateUser.Russian.activeStreak = 0;
-  } else {
-    console.log('3 HIT');
+  if (!recentDate || (recentDate.getTime() === yesterday.getTime())) {
     ++updateUser.Russian.activeStreak;
     if (updateUser.Russian.activeStreak > updateUser.Russian.longestStreak)
-      updateUser.Russian.longestStreak = updateUser.Russian.activeStreak;
+        updateUser.Russian.longestStreak = updateUser.Russian.activeStreak;
+  } else if (recentDate.getTime() < yesterday.getTime()) {
+      updateUser.Russian.activeStreak = 0;
   }
   return updateUser;
-};
 
-const updateUserStats = async (
-  id,
-  correctAttempt,
-  existingUserCardProgress
-) => {
+}
+
+const updateUserStats = async (id, correctAttempt, existingUserCardProgress) => {
   try {
     let user = await getUser();
-    console.log('User: ', user);
-    console.log('existingUserCardProgress: ', existingUserCardProgress);
+
     if (!existingUserCardProgress) {
-      ++user.Russian.attemptedCardCount;
-      if (!correctAttempt) ++user.Russian.errorCount;
+     ++user.Russian.attemptedCardCount;
+     if (!correctAttempt)
+        ++user.Russian.errorCount;
     }
     user = await updateStreak(id, user);
-    console.log('user AFTER update: ', user);
 
     user.save();
   } catch (err) {
-    console.log('ERROR: ', err);
+    console.log("ERROR: ", err)
   }
-};
+}
 
 export const POST = async (request) => {
   try {

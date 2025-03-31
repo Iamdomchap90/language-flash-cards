@@ -6,23 +6,22 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 
 const Statistics = () => {
   const { data: session } = useSession();
-  const [ statistics, setStatistics ] = useState(null);
+  const [statistics, setStatistics] = useState(null);
   const [error, setError] = useState('');
 
   const fetchUserStats = async () => {
     const response = await fetch('api/stats/');
     if (!response.ok) {
-      setError("Failed to fetch user's stats.")
+      setError("Failed to fetch user's stats.");
     } else {
       const data = await response.json();
       setStatistics(data);
-
     }
-    console.log("reponse: ", response)
+    console.log('reponse: ', response);
   };
 
   useEffect(() => {
-    console.log("USE EFFECT!")
+    console.log('USE EFFECT!');
     fetchUserStats();
   }, []);
 
@@ -32,14 +31,14 @@ const Statistics = () => {
       <div className="my-8 flex flex-col justify-center items-center h-[20vh]">
         <h1 className="my-4 header-text">Statistics</h1>
         <p className="mb-8">({userDisplay})</p>
-        {statistics &&
+        {statistics && (
           <ul>
             <li>Cards Attempted: {statistics?.uniqueAttempts}</li>
             <li>Card errors: {statistics?.uniqueErrors}</li>
             <li>Current Streak: {statistics?.activeStreak}</li>
             <li>Longest streak: {statistics?.longestStreak}</li>
           </ul>
-        }
+        )}
       </div>
     );
   }

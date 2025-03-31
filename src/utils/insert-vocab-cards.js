@@ -7,10 +7,11 @@ dotenv.config();
 const documentsToInsert = [
   {
     language: 'Russian',
-    englishText: 'to ask',
-    translationText: 'спрашивать',
+    englishText: 'to travel',
+    translationText: 'путешествовать',
     wordType: 'verb',
-    tags: ['general'],
+    verbType: 'imperfect',
+    tags: ['travel'],
   },
 ];
 
@@ -26,13 +27,19 @@ mongoose.connect(mongoURI, {
 });
 
 VocabCard.deleteMany({});
-VocabCard.insertMany(documentsToInsert)
-  // VocabCard.bulkWrite(bulkOps)
+// VocabCard.bulkWrite(bulkOps)
+VocabCard.insertMany(documentsToInsert, { ordered: false })
   .then((insertedDocs) => {
     console.log(`${insertedDocs.length} documents inserted`);
   })
   .catch((error) => {
-    console.error('Error inserting documents:', error);
+    if (error.code === 11000) {
+      console.warn(
+        'Duplicate key error encountered, some documents were skipped.'
+      );
+    } else {
+      console.error('Error inserting documents:', error);
+    }
   })
   .finally(() => {
     mongoose.disconnect();

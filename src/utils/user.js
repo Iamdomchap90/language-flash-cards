@@ -4,7 +4,6 @@ import mongoose from 'mongoose';
 import connect from '@/utils/db';
 import User from '@/models/User';
 
-
 export const getUserID = async () => {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -17,7 +16,7 @@ const getUser = async () => {
   try {
     const id = await getUserID();
     if (!id) {
-      console.error("Error: User ID is undefined or null.");
+      console.error('Error: User ID is undefined or null.');
       return null;
     }
 
@@ -31,7 +30,7 @@ const getUser = async () => {
 
     return user;
   } catch (error) {
-    console.error("Error fetching user:", error);
+    console.error('Error fetching user:', error);
     return null;
   }
 };

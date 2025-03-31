@@ -133,16 +133,24 @@ const FlashBoard = ({ data, updateNewCards }) => {
   const [isFirstRender, setIsFirstRender] = useState(true);
 
   const handleAnswerUpdate = async (cardIndex, cardID, isCorrect) => {
-    const response = await fetch('/api/vocab-cards/update', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ cardIndex, cardID, isCorrect }),
-    });
-    const data = await response.json();
-    setErrorCount(Number(errorCount) + Number(!isCorrect));
-    setAnswerCount(Number(answerCount) + 1);
+    try {
+      const response = await fetch('/api/vocab-cards/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cardIndex, cardID, isCorrect }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        console.log('Failed to update. ', data.message);
+      }
+      setErrorCount(Number(errorCount) + Number(!isCorrect));
+      setAnswerCount(Number(answerCount) + 1);
+    } catch (err) {
+      console.log('Error: ', error);
+    }
   };
 
   const newBoard = () => {

@@ -69,12 +69,27 @@ const FilterContainer = ({ filterCards, activeIndex }) => {
           Verbs
         </button>
       </div>
+      <div>
+        <button
+          className={activeIndex === 2 ? 'btn activeBtn' : 'btn'}
+          onClick={() => handleFilterClick(2, 'adjective')}
+        >
+          Adjectives
+        </button>
+      </div>
+      <div>
+        <button
+          className={activeIndex === 3 ? 'btn activeBtn' : 'btn'}
+          onClick={() => handleFilterClick(3, 'adverb')}
+        >
+          Adverbs
+        </button>
+      </div>
     </div>
   );
 };
 
 const SidePanel = ({ filterCards, activeIndex }) => {
-  console.log('A filter Cards: ', filterCards);
   return (
     <div className={styles.panelContainer}>
       <MatchConfig />

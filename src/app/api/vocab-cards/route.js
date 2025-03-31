@@ -43,10 +43,10 @@ export const GET = async (request) => {
           { $project: { _id: 0, vocabCard: '$ids' } }, // Rename field to vocabCard
         ]
       ).then((results) => results.map((doc) => doc.vocabCard));
-
       const notAttemptedVocabCards = await VocabCard.find({
         _id: { $nin: attemptedVocabCardIds }, // Cards whose ID is NOT in the attempted list
         language: 'Russian',
+        wordType: wordType,
       });
 
       const spacedRepetitionVocabCards = await VocabCard.find({
@@ -54,6 +54,7 @@ export const GET = async (request) => {
           $in: attemptedReviewVocabCardIds,
         },
         language: 'Russian',
+        wordType: wordType,
       });
 
       const reviewableVocabCards = [

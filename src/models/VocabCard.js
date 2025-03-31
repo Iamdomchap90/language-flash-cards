@@ -7,6 +7,7 @@ const vocabSchema = new Schema(
     englishText: { type: String },
     translationText: { type: String, unique: true },
     wordType: { type: String, unique: false },
+    verbType: { type: String, default: null },
     tags: { type: Array, of: String, unique: false },
     language: { type: String, unique: false },
   },

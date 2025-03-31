@@ -15,13 +15,11 @@ export const POST = async (req, res) => {
     });
   }
   const body = await req.json();
-  const { username, password } = body || {};
-
-  if (!username || !password) {
-    return new Response(
-      JSON.stringify({ error: 'Username and password are required.' }),
-      { status: 400 }
-    );
+  const { username, password, email } = body || {};
+  if (!username || !password || !email) {
+    return new Response(JSON.stringify({ error: 'All fields are required.' }), {
+      status: 400,
+    });
   }
 
   try {
@@ -38,11 +36,11 @@ export const POST = async (req, res) => {
     const newUser = new User({
       username: username,
       password: hashedPassword,
+      email: email,
       createdAt: new Date(),
     });
 
     await newUser.save();
-
     return new Response(
       JSON.stringify({ message: 'User created successfully.' }),
       { status: 201 }

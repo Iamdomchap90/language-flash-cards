@@ -1,36 +1,48 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
 import FlashBoard from '@/components/flash-cards/Flashcard';
-import SidePanel from '../side-panel/SidePanel';
+import SidePanel from '@/components/side-panel/SidePanel';
 import styles from './page.module.css';
 import AuthArea from '@/components/auth-area/AuthArea';
-// import getVocabCards from '../../lib/mongo/vocabulary';
 
 const Vocabulary = () => {
   const [data, setData] = useState([]);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activeButtonIndex, setActiveButtonIndex] = useState(null);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   const fetchData = useCallback(
     async (lexicalCategory = null, buttonIndex = null) => {
       setIsLoading(true);
-      console.log('called with (FETCH DATA): ', lexicalCategory);
-      const lexicalCategoryParameter = lexicalCategory
-        ? `?wordType=${lexicalCategory}`
-        : '';
-      const response = await fetch(
-        '/api/vocab-cards' + lexicalCategoryParameter
-      );
-      if (!response.ok) {
-        let errorResponse = await response.json();
-        throw new Error(errorResponse.error || 'Failed to fetch data');
-      }
-      const result = await response.json();
-      setData(result);
-      setActiveButtonIndex(buttonIndex);
+      setIsError(false);
 
-      setIsLoading(false);
+      try {
+        const lexicalCategoryParameter = lexicalCategory
+          ? `?wordType=${lexicalCategory}`
+          : '';
+        const response = await fetch(
+          '/api/vocab-cards' + lexicalCategoryParameter
+        );
+
+        if (!response.ok) {
+          let errorResponse = await response.json();
+          throw new Error(errorResponse.error || 'Failed to fetch data');
+        }
+
+        const result = await response.json();
+        setData(result);
+        setActiveButtonIndex(buttonIndex);
+      } catch (error) {
+        setIsError(true);
+        console.error('Fetch error:', error);
+      } finally {
+        setIsLoading(false);
+      }
     },
     []
   );
@@ -41,8 +53,12 @@ const Vocabulary = () => {
 
   const handleNextCards = () => {};
 
+  if (!hasMounted) {
+    return <p>Loading...</p>; // Prevents rendering mismatched content
+  }
+
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p>Loading vocabulary...</p>;
   }
 
   if (isError) {

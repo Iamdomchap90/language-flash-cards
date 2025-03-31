@@ -4,7 +4,11 @@ const { Schema } = mongoose;
 
 const userVocabCardProgressSchema = new Schema(
   {
-    user: { type: String, required: true }, // String to allow for OAuth users such as google
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     vocabCard: {
       type: Schema.Types.ObjectId,
       ref: 'VocabCard',

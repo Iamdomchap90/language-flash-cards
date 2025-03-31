@@ -47,7 +47,6 @@ export const POST = async (req, res) => {
       );
     }
   } catch (error) {
-    console.error('Login error:', error);
     return new Response(JSON.stringify({ error: 'Internal server error.' }), {
       status: 500,
     });

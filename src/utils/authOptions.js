@@ -1,5 +1,36 @@
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { generateThirtyDayActivity } from '@/models/User';
+import connect from '@/utils/db';
+import User from '@/models/User';
+
+async function findOrCreateMongoUser(user) {
+  /*
+  Looks for user in mongo db for an Oauth user,
+  if unable to find will create mongo reference.
+   */
+  await connect();
+
+  let existingUser = user?.email
+    ? await User.findOne({ email: user.email })
+    : await User.findOne({ username: user.username });
+  if (!existingUser) {
+    existingUser = await User.create({
+      username: user.email,
+      email: user.email,
+      password: null, // OAuth users don’t have passwords
+      Russian: {
+        attemptedCardCount: 0,
+        errorCount: 0,
+        activeStreak: 0,
+        longestStreak: 0,
+        thirtyDayActivity: generateThirtyDayActivity(),
+      },
+    });
+  }
+
+  return existingUser;
+}
 
 const authOptions = {
   providers: [
@@ -16,7 +47,6 @@ const authOptions = {
           headers: { 'Content-Type': 'application/json' },
         });
         const user = await res.json();
-
         if (res.ok && user) {
           return user.user;
         }
@@ -40,8 +70,9 @@ const authOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.username = user.username;
-        token.id = user.id;
+        const dbUser = await findOrCreateMongoUser(user);
+        token.username = dbUser.username;
+        token.id = dbUser.id;
       }
       return token;
     },

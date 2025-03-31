@@ -44,16 +44,27 @@ export const GET = async (request) => {
         ]
       ).then((results) => results.map((doc) => doc.vocabCard));
 
-      const notAttemptedVocabCards = await VocabCard.find({
+      const filterVocabCards = async (filter) => {
+        const query = {
+          language: 'Russian',
+          ...filter,
+        };
+
+        if (wordType) {
+          query.wordType = wordType;
+        }
+
+        return await VocabCard.find(query);
+      };
+
+      const notAttemptedVocabCards = await filterVocabCards({
         _id: { $nin: attemptedVocabCardIds }, // Cards whose ID is NOT in the attempted list
-        language: 'Russian',
       });
 
-      const spacedRepetitionVocabCards = await VocabCard.find({
+      const spacedRepetitionVocabCards = await filterVocabCards({
         _id: {
           $in: attemptedReviewVocabCardIds,
         },
-        language: 'Russian',
       });
 
       const reviewableVocabCards = [

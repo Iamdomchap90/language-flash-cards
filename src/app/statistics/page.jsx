@@ -17,11 +17,9 @@ const Statistics = () => {
       const data = await response.json();
       setStatistics(data);
     }
-    console.log('reponse: ', response);
   };
 
   useEffect(() => {
-    console.log('USE EFFECT!');
     fetchUserStats();
   }, []);
 
@@ -30,13 +28,13 @@ const Statistics = () => {
     return (
       <div className="my-8 flex flex-col justify-center items-center h-[20vh]">
         <h1 className="my-4 header-text">Statistics</h1>
-        <p className="mb-8">({userDisplay})</p>
+        <p className="mb-8 long-text">({userDisplay})</p>
         {statistics && (
           <ul>
-            <li>Cards Attempted: {statistics?.uniqueAttempts}</li>
-            <li>Card errors: {statistics?.uniqueErrors}</li>
-            <li>Current Streak: {statistics?.activeStreak}</li>
-            <li>Longest streak: {statistics?.longestStreak}</li>
+            <li className="long-text">Cards Attempted: {statistics?.uniqueAttempts}</li>
+            <li className="long-text">Card errors: {statistics?.uniqueErrors}</li>
+            <li className="long-text">Current Streak: {statistics?.activeStreak}</li>
+            <li className="long-text">Longest streak: {statistics?.longestStreak}</li>
           </ul>
         )}
       </div>

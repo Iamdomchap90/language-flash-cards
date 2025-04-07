@@ -3,14 +3,14 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 export const generateThirtyDayActivity = () => {
-  const activity = {};
+  const activity = new Map();
   const today = new Date();
 
   for (let i = 29; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(today.getDate() - i);
     const formattedDate = date.toISOString().split('T')[0];
-    activity[formattedDate] = 0;
+    activity.set(formattedDate, 0);
   }
 
   return activity;

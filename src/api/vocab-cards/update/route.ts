@@ -1,16 +1,17 @@
 import connect from '@/utils/db';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
+import { UserDocument, UserVocabCardProgressDocument } from '@/types/models';
 import { NextResponse } from 'next/server';
 import UserVocabCardProgress from '@/models/UserVocabCardProgress';
 import getUser, { getUserID } from '@/utils/user';
 import authOptions from '@/utils/authOptions';
 
 const getNextReviewDate = (
-  isCorrect,
-  attemptCount,
-  failedAttemptCount,
-  date = new Date()
-) => {
+  isCorrect: boolean,
+  attemptCount: number,
+  failedAttemptCount: number,
+  date: Date = new Date()
+): Date => {
   // Apply spaced repetition rules to get next date card is to be reviewed
   const successRate = (attemptCount - failedAttemptCount) / attemptCount;
   if (!isCorrect) {
@@ -29,7 +30,7 @@ const getNextReviewDate = (
   return date;
 };
 
-const updateStreak = async (updateId, updateUser) => {
+const updateStreak = async (updateId: Types.ObjectId, updateUser: UserDocument): Promise<UserDocument> => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const yesterday = new Date(today);
@@ -55,7 +56,7 @@ const updateStreak = async (updateId, updateUser) => {
 
 }
 
-const updateUserStats = async (id, correctAttempt, existingUserCardProgress) => {
+const updateUserStats = async (id:, correctAttempt: boolean, existingUserCardProgress: UserVocabCardProgressDocument):Promise<void> => {
   try {
     let user = await getUser();
 

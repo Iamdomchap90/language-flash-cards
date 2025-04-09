@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
+import { IVocabCard } from '@/types/models';
 
 const { Schema } = mongoose;
 
-const vocabSchema = new Schema(
+const vocabSchema = new Schema<IVocabCard>(
   {
     englishText: { type: String },
     translationText: { type: String, unique: true },
@@ -17,6 +18,6 @@ const vocabSchema = new Schema(
 vocabSchema.index({ englishText: 1, language: 1 }, { unique: true });
 
 const VocabCard =
-  mongoose.models.VocabCard || mongoose.model('VocabCard', vocabSchema);
+  mongoose.models.VocabCard || mongoose.model<IVocabCard>('VocabCard', vocabSchema);
 
 export default VocabCard;

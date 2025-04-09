@@ -3,6 +3,18 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styles from './page.module.css';
 import AuthArea from '@/components/auth-area/AuthArea';
 import { useSession, signIn, signOut } from 'next-auth/react';
+<<<<<<< Updated upstream
+=======
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer
+} from 'recharts';
+>>>>>>> Stashed changes
 
 const Statistics = () => {
   const { data: session } = useSession();

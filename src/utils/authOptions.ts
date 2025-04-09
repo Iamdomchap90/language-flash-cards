@@ -3,12 +3,13 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { generateThirtyDayActivity } from '@/models/User';
 import connect from '@/utils/db';
 import User from '@/models/User';
+import { NextAuthOptions } from 'next-auth';
 
-async function findOrCreateMongoUser(user) {
+async function findOrCreateMongoUser(user: User):Promise<User>  {
   /*
   Looks for user in mongo db for an Oauth user,
   if unable to find will create mongo reference.
-   */
+  */
   await connect();
 
   let existingUser = user?.email
@@ -32,7 +33,7 @@ async function findOrCreateMongoUser(user) {
   return existingUser;
 }
 
-const authOptions = {
+const authOptions:NextAuthOptions = {
   providers: [
     CredentialsProvider.default({
       name: 'Credentials',
@@ -40,7 +41,7 @@ const authOptions = {
         username: { label: 'Username', type: 'text', placeholder: 'jsmith' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const res = await fetch(`${process.env.BASE_URL}/api/auth/login`, {
           method: 'POST',
           body: JSON.stringify(credentials),

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
-import ToggleSwitch from '@/components/widgets/ToggleSwitch';
+import ToggleSwitch from '@/app/components/widgets/ToggleSwitch';
 
 const MatchConfig = () => {
   // Radio select for text entry, multiple choice

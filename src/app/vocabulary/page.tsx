@@ -1,9 +1,9 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
-import FlashBoard from '@/components/flash-cards/Flashcard';
-import SidePanel from '@/components/side-panel/SidePanel';
+import FlashBoard from '@/app/components/flash-cards/Flashcard';
+import SidePanel from '@/app/components/side-panel/SidePanel';
 import styles from './page.module.css';
-import AuthArea from '@/components/auth-area/AuthArea';
+import AuthArea from '@/app/components/auth-area/AuthArea';
 
 const Vocabulary = () => {
   const [data, setData] = useState([]);
@@ -17,7 +17,7 @@ const Vocabulary = () => {
   }, []);
 
   const fetchData = useCallback(
-    async (lexicalCategory = null, buttonIndex = null) => {
+    async (lexicalCategory: string | null = null, buttonIndex: number | null = null):void => {
       setIsLoading(true);
       setIsError(false);
 

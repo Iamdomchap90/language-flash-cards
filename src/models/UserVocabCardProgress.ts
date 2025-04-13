@@ -3,8 +3,6 @@ import { IUserVocabCardProgress } from '@/types/models';
 
 const { Schema } = mongoose;
 
-
-
 const userVocabCardProgressSchema = new Schema<IUserVocabCardProgress>(
   {
     user: {
@@ -27,6 +25,9 @@ const userVocabCardProgressSchema = new Schema<IUserVocabCardProgress>(
 
 const UserVocabCardProgress =
   mongoose.models.UserVocabCardProgress ||
-  mongoose.model<IUserVocabCardProgress>('UserVocabCardProgress', userVocabCardProgressSchema);
+  mongoose.model<IUserVocabCardProgress>(
+    'UserVocabCardProgress',
+    userVocabCardProgressSchema
+  );
 
 export default UserVocabCardProgress;

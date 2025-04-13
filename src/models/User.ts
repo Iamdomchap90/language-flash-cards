@@ -3,7 +3,7 @@ import { IUser } from '@types/models';
 
 const { Schema } = mongoose;
 
-export const generateThirtyDayActivity = ():Map<string, number> => {
+export const generateThirtyDayActivity = (): Map<string, number> => {
   const activity = new Map<string, number>();
 
   const today = new Date();
@@ -46,5 +46,4 @@ const userSchema = new Schema<IUser>(
 );
 
 const User = mongoose.models.User || mongoose.model<IUser>('User', userSchema);
-
 export default User;

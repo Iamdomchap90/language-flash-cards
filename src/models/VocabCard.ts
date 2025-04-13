@@ -18,6 +18,7 @@ const vocabSchema = new Schema<IVocabCard>(
 vocabSchema.index({ englishText: 1, language: 1 }, { unique: true });
 
 const VocabCard =
-  mongoose.models.VocabCard || mongoose.model<IVocabCard>('VocabCard', vocabSchema);
+  mongoose.models.VocabCard ||
+  mongoose.model<IVocabCard>('VocabCard', vocabSchema);
 
 export default VocabCard;

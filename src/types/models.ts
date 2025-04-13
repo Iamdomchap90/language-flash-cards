@@ -13,7 +13,7 @@ export interface IUser {
   };
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
 export type UserDocument = HydratedDocument<IUser>;
 
@@ -26,19 +26,20 @@ export interface IUserVocabCardProgress {
   nextReviewedAt: Date;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
-export type UserVocabCardProgressDocument = HydratedDocument<IUserVocabCardProgress>;
+export type UserVocabCardProgressDocument =
+  HydratedDocument<IUserVocabCardProgress>;
 
 export interface IVocabCard {
   englishText: string;
   translationText: string;
   wordType: string;
   verbType: string;
-  tags: string[],
-  language: string,
+  tags: string[];
+  language: string;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
 export type VocabCardDocument = HydratedDocument<IVocabCard>;

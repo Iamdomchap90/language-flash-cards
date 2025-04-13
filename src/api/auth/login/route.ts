@@ -3,7 +3,7 @@ import connect from '@/utils/db';
 import User from '@/models/User';
 import { NextRequest, NextResponse } from 'next/server';
 
-interface LoginBody {
+export interface LoginBody {
   username: string;
   password: string;
 }
@@ -25,9 +25,7 @@ export const POST = async (req: NextRequest): Promise<NextResponse> => {
 
   if (!username || !password) {
     return new Response(
-      JSON.stringify(
-        { error: 'Username and password are required.' }
-      ),
+      JSON.stringify({ error: 'Username and password are required.' }),
       { status: 400 }
     );
   }

@@ -3,8 +3,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styles from './page.module.css';
 import AuthArea from '@/components/auth-area/AuthArea';
 import { useSession, signIn, signOut } from 'next-auth/react';
-<<<<<<< Updated upstream
-=======
 import {
   LineChart,
   Line,
@@ -12,9 +10,8 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from 'recharts';
->>>>>>> Stashed changes
 
 const Statistics = () => {
   const { data: session } = useSession();
@@ -26,7 +23,7 @@ const Statistics = () => {
     if (!response.ok) {
       setError("Failed to fetch user's stats.");
     } else {
-      const data = await response.json();
+      let data = await response.json();
       setStatistics(data);
     }
   };
@@ -38,16 +35,32 @@ const Statistics = () => {
   const userDisplay = session?.user.username;
   if (session?.user) {
     return (
-      <div className="my-8 flex flex-col justify-center items-center h-[20vh]">
+      <div className="my-8 flex flex-col justify-center items-center">
         <h1 className="my-4 header-text">Statistics</h1>
         <p className="mb-8 long-text">({userDisplay})</p>
         {statistics && (
-          <ul>
-            <li className="long-text">Cards Attempted: {statistics?.uniqueAttempts}</li>
-            <li className="long-text">Card errors: {statistics?.uniqueErrors}</li>
-            <li className="long-text">Current Streak: {statistics?.activeStreak}</li>
-            <li className="long-text">Longest streak: {statistics?.longestStreak}</li>
-          </ul>
+          <>
+            <ul className="mb-8 long-text">
+              <li>Cards Attempted: {statistics?.uniqueAttempts}</li>
+              <li>Card errors: {statistics?.uniqueErrors}</li>
+              <li>Current Streak: {statistics?.activeStreak}</li>
+              <li>Longest streak: {statistics?.longestStreak}</li>
+            </ul>
+            <h2 className="w-[600px] p-[40px] long-text font-bold">
+              Recent Activity
+            </h2>
+            <div className="w-full justify-center flex">
+              <ResponsiveContainer width={600} height={400}>
+                <LineChart data={statistics.thirtyDayActivity}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="x" />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Line dataKey="y" type="monotone" stroke="#8884d8" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </>
         )}
       </div>
     );

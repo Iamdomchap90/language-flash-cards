@@ -1,8 +1,31 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
+import { VocabCardDocument } from '@/types/models';
 
-const FlashCard = ({ cardData, cardIndex, onAnswerUpdate, isBoardReset }) => {
+type updateCallbackType = (lexicalCategory: string | null, buttonIndex: number | null) => void;
+
+type FlashCardProps = {
+  cardData: VocabCardDocument;
+  cardIndex: number;
+  onAnswerUpdate: updateCallbackType,
+  isBoardReset: boolean;
+}
+
+type FlashRowProps = {
+  rowData: VocabCardDocument[];
+  rowIndex: number;
+  onAnswerUpdate: updateCallbackType;
+  numCardsPerRow: number;
+  isBoardReset: boolean;
+}
+
+type FlashBoardProps = {
+  data: VocabCardDocument[];
+  updateNewCards: updateCallbackType;
+}
+
+const FlashCard: React.FC<FlashCardProps> = ({ cardData, cardIndex, onAnswerUpdate, isBoardReset }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -96,7 +119,7 @@ const FlashCard = ({ cardData, cardIndex, onAnswerUpdate, isBoardReset }) => {
   );
 };
 
-const FlashRow = ({
+const FlashRow: React.FC<FlashRowProps> = ({
   rowData,
   rowIndex,
   onAnswerUpdate,
@@ -121,7 +144,7 @@ const FlashRow = ({
   );
 };
 
-const FlashBoard = ({ data, updateNewCards }) => {
+const FlashBoard: React.FC<FlashBoardProps> = ({ data, updateNewCards }) => {
   const numberOfRows = 3;
   const numberOfColumns = 3;
   const numberOfCards = Math.min(data.length, numberOfRows * numberOfColumns);

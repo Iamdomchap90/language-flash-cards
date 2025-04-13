@@ -1,21 +1,27 @@
 import { hash } from 'bcryptjs';
 import connect from '@/utils/db';
 import User from '@/models/User';
+import { NextRequest, NextResponse } from 'next/server';
+import { LoginBody } from '@/api/auth/login/route';
 
-export const GET = async (req, res) => {
+interface SignupBody extends LoginBody {
+  email: string;
+}
+
+export const GET = async (req: NextRequest): Promise<NextResponse> => {
   return new Response('This route supports only POST requests.', {
     status: 405,
   });
 };
 
-export const POST = async (req, res) => {
+export const POST = async (req: NextRequest): Promise<NextResponse> => {
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed.' }), {
       status: 405,
     });
   }
-  const body = await req.json();
-  const { username, password, email } = body || {};
+  const body = (await req.json()) as SignupBody;
+  const { username, password, email } = body;
   if (!username || !password || !email) {
     return new Response(JSON.stringify({ error: 'All fields are required.' }), {
       status: 400,

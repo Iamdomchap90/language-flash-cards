@@ -3,8 +3,7 @@ import VocabCard from '@/models/VocabCard';
 import mongoURI from '@/utils/config';
 import connect from '@/utils/db';
 
-
-const documentsToInsert:VocabCardDocument[] = [
+const documentsToInsert: VocabCardDocument[] = [
   {
     language: 'Russian',
     englishText: 'to travel',

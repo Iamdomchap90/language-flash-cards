@@ -3,9 +3,10 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { generateThirtyDayActivity } from '@/models/User';
 import connect from '@/utils/db';
 import User from '@/models/User';
+import { UserDocument } from '@/types/models';
 import { NextAuthOptions } from 'next-auth';
 
-async function findOrCreateMongoUser(user: User):Promise<User>  {
+async function findOrCreateMongoUser(user: User): Promise<UserDocument> {
   /*
   Looks for user in mongo db for an Oauth user,
   if unable to find will create mongo reference.
@@ -33,9 +34,9 @@ async function findOrCreateMongoUser(user: User):Promise<User>  {
   return existingUser;
 }
 
-const authOptions:NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
-    CredentialsProvider.default({
+    CredentialsProvider({
       name: 'Credentials',
       credentials: {
         username: { label: 'Username', type: 'text', placeholder: 'jsmith' },
@@ -55,7 +56,7 @@ const authOptions:NextAuthOptions = {
         return null;
       },
     }),
-    GoogleProvider.default({
+    GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),

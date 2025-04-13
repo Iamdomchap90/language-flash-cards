@@ -19,7 +19,7 @@ export const GET = async (request) => {
       uniqueErrors: user.Russian.errorCount,
       activeStreak: user.Russian.activeStreak,
       longestStreak: user.Russian.longestStreak,
-      thirtyDayActivity: graphData
+      thirtyDayActivity: graphData,
     };
     return new NextResponse(JSON.stringify(stats), {
       status: 200,

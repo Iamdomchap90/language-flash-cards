@@ -4,20 +4,27 @@ import FlashBoard from '@/app/components/flash-cards/Flashcard';
 import SidePanel from '@/app/components/side-panel/SidePanel';
 import styles from './page.module.css';
 import AuthArea from '@/app/components/auth-area/AuthArea';
+import { VocabCardDocument } from '@/types/models';
 
 const Vocabulary = () => {
-  const [data, setData] = useState([]);
-  const [isError, setIsError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [activeButtonIndex, setActiveButtonIndex] = useState(null);
-  const [hasMounted, setHasMounted] = useState(false);
+  const [data, setData] = useState<VocabCardDocument[]>([]);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [activeButtonIndex, setActiveButtonIndex] = useState<number | null>(
+    null
+  );
+  const [hasMounted, setHasMounted] = useState<boolean>(false);
+  const [wordCategory, setWordCategory] = useState<string | null>(null);
 
   useEffect(() => {
     setHasMounted(true);
   }, []);
 
   const fetchData = useCallback(
-    async (lexicalCategory: string | null = null, buttonIndex: number | null = null):void => {
+    async (
+      lexicalCategory: string | null = null,
+      buttonIndex: number | null = null
+    ): Promise<void> => {
       setIsLoading(true);
       setIsError(false);
 
@@ -37,6 +44,7 @@ const Vocabulary = () => {
         const result = await response.json();
         setData(result);
         setActiveButtonIndex(buttonIndex);
+        setWordCategory(lexicalCategory);
       } catch (error) {
         setIsError(true);
         console.error('Fetch error:', error);
@@ -72,7 +80,12 @@ const Vocabulary = () => {
         <AuthArea />
       </div>
       <div className={styles.boardContainer}>
-        <FlashBoard data={data} updateNewCards={fetchData} />
+        <FlashBoard
+          data={data}
+          updateNewCards={fetchData}
+          buttonIndex={activeButtonIndex}
+          wordType={wordCategory}
+        />
       </div>
       <SidePanel filterCards={fetchData} activeIndex={activeButtonIndex} />
     </>

@@ -13,7 +13,7 @@ export interface IUser {
   };
   createdAt: Date;
   updatedAt: Date;
-};
+}
 
 export type UserDocument = HydratedDocument<IUser>;
 
@@ -26,7 +26,7 @@ export interface IUserVocabCardProgress {
   nextReviewedAt: Date;
   createdAt: Date;
   updatedAt: Date;
-};
+}
 
 export type UserVocabCardProgressDocument =
   HydratedDocument<IUserVocabCardProgress>;
@@ -40,6 +40,6 @@ export interface IVocabCard {
   language: string;
   createdAt: Date;
   updatedAt: Date;
-};
+}
 
 export type VocabCardDocument = HydratedDocument<IVocabCard>;

@@ -1,10 +1,9 @@
 import connect from '@/utils/db';
 import mongoose, { Types } from 'mongoose';
 import { UserDocument, UserVocabCardProgressDocument } from '@/types/models';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import UserVocabCardProgress from '@/models/UserVocabCardProgress';
 import getUser, { getUserID } from '@/utils/user';
-import authOptions from '@/utils/authOptions';
 
 const getNextReviewDate = (
   isCorrect: boolean,
@@ -28,6 +27,53 @@ const getNextReviewDate = (
     }
   }
   return date;
+};
+
+const updateThirtyDayActivity = (activityUser: UserDocument): UserDocument => {
+  let thirtyDayActivityKeys = Array.from(
+    activityUser.Russian.thirtyDayActivity.keys()
+  );
+  let today = new Date();
+  const mostRecentDayStr = thirtyDayActivityKeys.at(-1);
+  const mostRecentDay = new Date(mostRecentDayStr + 'T00:00:00Z');
+  const todayStr = today.toISOString().split('T')[0];
+  const millisecsInDay = 1000 * 60 * 60 * 24;
+  today.setHours(0, 0, 0, 0);
+  let thirtyDaysAgo = new Date(today);
+  thirtyDaysAgo.setDate(today.getDate() - 30);
+
+  const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().split('T')[0];
+  // Work out date 30 days ago. Remove keys
+  // as old and older than that date.
+  thirtyDayActivityKeys.forEach((dateStr) => {
+    if (dateStr <= thirtyDaysAgoStr) {
+      activityUser.Russian.thirtyDayActivity.delete(dateStr);
+    }
+  });
+
+  // Fill all dates between last date and today with 0.
+  if (mostRecentDay < today) {
+    const daysDifference =
+      (today.getTime() - mostRecentDay.getTime()) / millisecsInDay;
+    for (let day = 1; day < daysDifference; day++) {
+      let zeroTimestamp = mostRecentDay.getTime() + day * millisecsInDay;
+      let zeroDate = new Date(zeroTimestamp);
+      let zeroDateStr = zeroDate.toISOString().split('T')[0];
+      activityUser.Russian.thirtyDayActivity.set(zeroDateStr, 0);
+    }
+  }
+
+  // Does today's date exist as key if so imply increment by 1
+  if (thirtyDayActivityKeys.includes(todayStr)) {
+    let originalVal = activityUser.Russian.thirtyDayActivity.get(
+      todayStr
+    ) as number;
+    activityUser.Russian.thirtyDayActivity.set(todayStr, originalVal + 1);
+  } else {
+    activityUser.Russian.thirtyDayActivity.set(todayStr, 1);
+  }
+
+  return activityUser;
 };
 
 const updateStreak = async (
@@ -71,14 +117,14 @@ const updateUserStats = async (
       if (!correctAttempt) ++user.Russian.errorCount;
     }
     user = await updateStreak(id, user);
-
+    user = updateThirtyDayActivity(user);
     user.save();
   } catch (err) {
     console.log('ERROR: ', err);
   }
 };
 
-export const POST = async (request) => {
+export const POST = async (request: NextRequest) => {
   try {
     const { cardIndex, cardID, isCorrect } = await request.json();
     const userID = await getUserID();
@@ -93,16 +139,17 @@ export const POST = async (request) => {
         }
       );
     }
-    const vocabCardID = mongoose.Types.ObjectId(cardID);
+    const vocabCardID = new mongoose.Types.ObjectId(cardID);
     await connect();
-    const userVocabCardProgress = await UserVocabCardProgress.findOne({
+    const cardProgress = (await UserVocabCardProgress.findOne({
       user: userID,
       vocabCard: vocabCardID,
-    });
-    await updateUserStats(userID, isCorrect, userVocabCardProgress);
-    const totalAttempts = (UserVocabCardProgress?.totalAttempts || 0) + 1;
+    })) as UserVocabCardProgressDocument;
+
+    await updateUserStats(userID, isCorrect, cardProgress);
+    const totalAttempts = (cardProgress?.totalAttempts || 0) + 1;
     const incorrectAnswerCountUnchanged =
-      userVocabCardProgress?.incorrectAnswerCount || 0;
+      cardProgress?.incorrectAnswerCount || 0;
     const incorrectAnswerCount = isCorrect
       ? incorrectAnswerCountUnchanged
       : incorrectAnswerCountUnchanged + 1;

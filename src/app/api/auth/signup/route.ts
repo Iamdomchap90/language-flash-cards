@@ -2,37 +2,40 @@ import { hash } from 'bcryptjs';
 import connect from '@/utils/db';
 import User from '@/models/User';
 import { NextRequest, NextResponse } from 'next/server';
-import { LoginBody } from '@/api/auth/login/route';
+import { LoginBody } from '@/app/api/auth/login/route';
 
 interface SignupBody extends LoginBody {
   email: string;
 }
 
 export const GET = async (req: NextRequest): Promise<NextResponse> => {
-  return new Response('This route supports only POST requests.', {
+  return new NextResponse('This route supports only POST requests.', {
     status: 405,
   });
 };
 
 export const POST = async (req: NextRequest): Promise<NextResponse> => {
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed.' }), {
+    return new NextResponse(JSON.stringify({ error: 'Method not allowed.' }), {
       status: 405,
     });
   }
   const body = (await req.json()) as SignupBody;
   const { username, password, email } = body;
   if (!username || !password || !email) {
-    return new Response(JSON.stringify({ error: 'All fields are required.' }), {
-      status: 400,
-    });
+    return new NextResponse(
+      JSON.stringify({ error: 'All fields are required.' }),
+      {
+        status: 400,
+      }
+    );
   }
 
   try {
     await connect();
     const existingUser = await User.findOne({ username });
     if (existingUser) {
-      return new Response(
+      return new NextResponse(
         JSON.stringify({ message: 'Username is already taken.' }),
         { status: 400 }
       );
@@ -47,13 +50,16 @@ export const POST = async (req: NextRequest): Promise<NextResponse> => {
     });
 
     await newUser.save();
-    return new Response(
+    return new NextResponse(
       JSON.stringify({ message: 'User created successfully.' }),
       { status: 201 }
     );
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Internal server error.' }), {
-      status: 500,
-    });
+    return new NextResponse(
+      JSON.stringify({ error: 'Internal server error.' }),
+      {
+        status: 500,
+      }
+    );
   }
 };

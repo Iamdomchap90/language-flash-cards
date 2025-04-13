@@ -17,8 +17,8 @@ const userVocabCardProgressSchema = new Schema<IUserVocabCardProgress>(
     },
     totalAttempts: { type: Number, default: 0 },
     incorrectAnswerCount: { type: Number, default: 0 },
-    lastAttemptedAt: { type: Date, default: null },
-    nextReviewedAt: { type: Date, default: null },
+    lastAttemptedAt: { type: Date, required: true },
+    nextReviewedAt: { type: Date, required: true },
   },
   { timestamps: true }
 );

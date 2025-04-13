@@ -6,9 +6,9 @@ import ToggleSwitch from '@/app/components/widgets/ToggleSwitch';
 const MatchConfig = () => {
   // Radio select for text entry, multiple choice
 
-  const [selectedConfig, setSelectedConfig] = useState('text'); // Default selected Config
+  const [selectedConfig, setSelectedConfig] = useState<string>('text'); // Default selected Config
 
-  const handleConfigChange = (event) => {
+  const handleConfigChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedConfig(event.target.value);
   };
 

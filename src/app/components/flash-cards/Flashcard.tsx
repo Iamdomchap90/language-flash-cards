@@ -2,34 +2,47 @@
 import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import { VocabCardDocument } from '@/types/models';
+import { FilterCardsCallbackType } from '@/types/callbacks';
+import { Types } from 'mongoose';
 
-type updateCallbackType = (lexicalCategory: string | null, buttonIndex: number | null) => void;
+type updateCardCallbackType = (
+  cardIndex: number,
+  cardID: Types.ObjectId,
+  isCorrect: boolean
+) => void;
 
 type FlashCardProps = {
   cardData: VocabCardDocument;
   cardIndex: number;
-  onAnswerUpdate: updateCallbackType,
+  onAnswerUpdate: updateCardCallbackType;
   isBoardReset: boolean;
-}
+};
 
 type FlashRowProps = {
   rowData: VocabCardDocument[];
   rowIndex: number;
-  onAnswerUpdate: updateCallbackType;
+  onAnswerUpdate: updateCardCallbackType;
   numCardsPerRow: number;
   isBoardReset: boolean;
-}
+};
 
 type FlashBoardProps = {
   data: VocabCardDocument[];
-  updateNewCards: updateCallbackType;
-}
+  updateNewCards: FilterCardsCallbackType;
+  activeButton: number | null;
+  wordType: string | null;
+};
 
-const FlashCard: React.FC<FlashCardProps> = ({ cardData, cardIndex, onAnswerUpdate, isBoardReset }) => {
-  const [isFlipped, setIsFlipped] = useState(false);
-  const [isZoomed, setIsZoomed] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-  const [isAnswerCorrect, setIsAnswerCorrect] = useState(null); // null = unanswered
+const FlashCard: React.FC<FlashCardProps> = ({
+  cardData,
+  cardIndex,
+  onAnswerUpdate,
+  isBoardReset,
+}) => {
+  const [isFlipped, setIsFlipped] = useState<boolean>(false);
+  const [isZoomed, setIsZoomed] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
   const handleCardClick = () => {
     setIsZoomed(true);
   };
@@ -144,7 +157,12 @@ const FlashRow: React.FC<FlashRowProps> = ({
   );
 };
 
-const FlashBoard: React.FC<FlashBoardProps> = ({ data, updateNewCards }) => {
+const FlashBoard: React.FC<FlashBoardProps> = ({
+  data,
+  updateNewCards,
+  activeButton,
+  wordType,
+}) => {
   const numberOfRows = 3;
   const numberOfColumns = 3;
   const numberOfCards = Math.min(data.length, numberOfRows * numberOfColumns);
@@ -155,7 +173,11 @@ const FlashBoard: React.FC<FlashBoardProps> = ({ data, updateNewCards }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFirstRender, setIsFirstRender] = useState(true);
 
-  const handleAnswerUpdate = async (cardIndex, cardID, isCorrect) => {
+  const handleAnswerUpdate = async (
+    cardIndex: number,
+    cardID: Types.ObjectId,
+    isCorrect: boolean
+  ) => {
     try {
       const response = await fetch('/api/vocab-cards/update', {
         method: 'POST',
@@ -172,14 +194,14 @@ const FlashBoard: React.FC<FlashBoardProps> = ({ data, updateNewCards }) => {
       setErrorCount(Number(errorCount) + Number(!isCorrect));
       setAnswerCount(Number(answerCount) + 1);
     } catch (err) {
-      console.log('Error: ', error);
+      console.log('Error: ', err);
     }
   };
 
   const newBoard = () => {
     setErrorCount(0);
     setAnswerCount(0);
-    updateNewCards();
+    updateNewCards(wordType, activeButton);
   };
 
   const retryBoard = () => {

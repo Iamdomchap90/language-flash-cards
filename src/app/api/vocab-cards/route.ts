@@ -8,7 +8,7 @@ import { IVocabCard } from '@/types/models';
 
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    console.log("VOCAB CARDS HIT!")
+    console.log('VOCAB CARDS HIT!');
     const { searchParams } = new URL(request.url);
     const wordType = searchParams.get('wordType');
     let baseFilter = { language: 'Russian' };
@@ -46,7 +46,9 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         ]
       ).then((results) => results.map((doc) => doc.vocabCard));
 
-      const filterVocabCards = async (filter: FilterQuery<IVocabCard>): Promise<VocabCardDocument[]> => {
+      const filterVocabCards = async (
+        filter: FilterQuery<IVocabCard>
+      ): Promise<VocabCardDocument[]> => {
         const query = {
           language: 'Russian',
           ...filter,

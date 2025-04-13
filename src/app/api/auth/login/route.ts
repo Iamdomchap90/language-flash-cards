@@ -8,11 +8,19 @@ export interface LoginBody {
   password: string;
 }
 
-export const GET = async (req: NextAPIRequest, res: NextAPIResponse): Promise<NextAPIResponse> => {
-  return res.status(405).json({error: 'This route supports only POST requests.' });
+export const GET = async (
+  req: NextAPIRequest,
+  res: NextAPIResponse
+): Promise<NextAPIResponse> => {
+  return res
+    .status(405)
+    .json({ error: 'This route supports only POST requests.' });
 };
 
-export const POST = async (req: NextAPIRequest, res: NextAPIResponse): Promise<NextAPIResponse> => {
+export const POST = async (
+  req: NextAPIRequest,
+  res: NextAPIResponse
+): Promise<NextAPIResponse> => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed.' });
   }
@@ -20,7 +28,9 @@ export const POST = async (req: NextAPIRequest, res: NextAPIResponse): Promise<N
   const { username, password } = body;
 
   if (!username || !password) {
-    return res.status(400).json({ error: 'Username and password are required.' });
+    return res
+      .status(400)
+      .json({ error: 'Username and password are required.' });
   }
 
   try {
@@ -32,13 +42,13 @@ export const POST = async (req: NextAPIRequest, res: NextAPIResponse): Promise<N
       return res.status(401).json({ error: 'Invalid password' });
     } else {
       return res.status(200).json({
-          user: {
-            id: existingUser._id,
-            username: existingUser.username,
-            createdAt: existingUser.createdAt,
-            updatedAt: existingUser.updatedAt,
-          },
-        });
+        user: {
+          id: existingUser._id,
+          username: existingUser.username,
+          createdAt: existingUser.createdAt,
+          updatedAt: existingUser.updatedAt,
+        },
+      });
     }
   } catch (error) {
     return res.status(500).json({ error: 'Internal server error.' });

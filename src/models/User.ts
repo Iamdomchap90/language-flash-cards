@@ -4,7 +4,7 @@ import { IUser } from '@/types/models';
 const { Schema } = mongoose;
 
 export const generateThirtyDayActivity = (): Map<string, number> => {
-  const activity = new Map<string, number>();
+  let activity = new Map<string, number>();
 
   const today = new Date();
 
@@ -12,7 +12,7 @@ export const generateThirtyDayActivity = (): Map<string, number> => {
     const date = new Date(today);
     date.setDate(today.getDate() - i);
     const formattedDate = date.toISOString().split('T')[0];
-    activity[formattedDate] = 0;
+    activity.set(formattedDate, 0);
   }
 
   return activity;

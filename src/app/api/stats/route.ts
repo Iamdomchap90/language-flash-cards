@@ -1,14 +1,15 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import connect from '@/utils/db';
 import getUser from '@/utils/user';
 
-export const GET = async (request) => {
+type DataPoint = { x: string; y: number};
+
+export const GET = async (request: NextRequest) => {
   try {
     const user = await getUser();
-
-    let graphData = [];
+    let graphData: DataPoint[] = [];
     const buildGraphData = () => {
-      user.Russian.thirtyDayActivity.forEach((count, date) => {
+      user.Russian.thirtyDayActivity.forEach((count: number, date: string) => {
         graphData.push({ x: date, y: count });
       });
       return graphData;

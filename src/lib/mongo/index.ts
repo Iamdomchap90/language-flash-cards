@@ -1,11 +1,11 @@
 import { MongoClient } from 'mongodb';
+import mongoURI from '@/utils/config';
 
-const URI = process.env.MONGODB_URI;
 const options = {};
 
-if (!URI) throw new error('Please add your Mongo URI to .env.local');
+if (!mongoURI) throw new error('Please add your Mongo URI to .env.local');
 
-let client = new MongoClient(URI, options);
+let client = new MongoClient(mongoURI, options);
 let clientPromise;
 
 if (process.env.NODE_ENV !== 'production') {

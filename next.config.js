@@ -9,6 +9,11 @@ const nextConfig = {
       use: 'file-loader',
     });
 
+    // config.module.rules.push({
+    //   test: /\.module\.css$/,
+    //   use: ['style-loader', 'css-loader?modules'],
+    // });
+
     return config;
   },
 };

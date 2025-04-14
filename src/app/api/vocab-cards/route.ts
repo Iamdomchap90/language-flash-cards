@@ -1,12 +1,14 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import connect from '@/utils/db';
 import VocabCard from '@/models/VocabCard';
 import UserVocabCardProgress from '@/models/UserVocabCardProgress';
 import { getUserID } from '@/utils/user';
-import mongoose from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
+import { IVocabCard } from '@/types/models';
 
-export const GET = async (request) => {
+export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
+    console.log('VOCAB CARDS HIT!');
     const { searchParams } = new URL(request.url);
     const wordType = searchParams.get('wordType');
     let baseFilter = { language: 'Russian' };
@@ -44,7 +46,9 @@ export const GET = async (request) => {
         ]
       ).then((results) => results.map((doc) => doc.vocabCard));
 
-      const filterVocabCards = async (filter) => {
+      const filterVocabCards = async (
+        filter: FilterQuery<IVocabCard>
+      ): Promise<VocabCardDocument[]> => {
         const query = {
           language: 'Russian',
           ...filter,

@@ -1,9 +1,11 @@
 import mongoose from 'mongoose';
+import { IUser } from '@/types/models';
 
 const { Schema } = mongoose;
 
-export const generateThirtyDayActivity = () => {
-  const activity = new Map();
+export const generateThirtyDayActivity = (): Map<string, number> => {
+  let activity = new Map<string, number>();
+
   const today = new Date();
 
   for (let i = 29; i >= 0; i--) {
@@ -16,7 +18,7 @@ export const generateThirtyDayActivity = () => {
   return activity;
 };
 
-const userSchema = new Schema(
+const userSchema = new Schema<IUser>(
   {
     username: { type: String, unique: true, required: true },
     password: { type: String, required: false }, // false for oauth users
@@ -43,6 +45,5 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-const User = mongoose.models.User || mongoose.model('User', userSchema);
-
+const User = mongoose.models.User || mongoose.model<IUser>('User', userSchema);
 export default User;

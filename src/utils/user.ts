@@ -2,9 +2,12 @@ import { getServerSession } from 'next-auth';
 import authOptions from '@/utils/authOptions';
 import mongoose from 'mongoose';
 import connect from '@/utils/db';
+import UserDocument from '@/types/models';
 import User from '@/models/User';
 
-export const getUserID = async () => {
+export const getUserID = async (): Promise<
+  mongoose.Types.ObjectId | undefined
+> => {
   const session = await getServerSession(authOptions);
   if (!session) {
     return;
@@ -12,7 +15,7 @@ export const getUserID = async () => {
   return new mongoose.Types.ObjectId(session.user?.id);
 };
 
-const getUser = async () => {
+const getUser = async (): Promise<UserDocument | null> => {
   try {
     const id = await getUserID();
     if (!id) {

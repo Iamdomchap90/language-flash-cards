@@ -1,10 +1,9 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import VocabCard from '../models/VocabCard.js';
+import VocabCard from '@/models/VocabCard';
+import mongoURI from '@/utils/config';
+import connect from '@/utils/db';
 
-dotenv.config();
-
-const documentsToInsert = [
+const documentsToInsert: VocabCardDocument[] = [
   {
     language: 'Russian',
     englishText: 'to travel',
@@ -15,16 +14,11 @@ const documentsToInsert = [
   },
 ];
 
-const mongoURI = process.env.MONGODB_URI;
-
 if (!mongoURI) {
   throw new Error('MongoDB URI is not defined in process.env.MONGODB_URI');
 }
 
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+await connect();
 
 VocabCard.deleteMany({});
 // VocabCard.bulkWrite(bulkOps)

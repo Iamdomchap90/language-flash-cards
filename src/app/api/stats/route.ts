@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import connect from '@/utils/db';
 import getUser from '@/utils/user';
 
-type DataPoint = { x: string; y: number};
+type DataPoint = { x: string; y: number };
 
 export const GET = async (request: NextRequest) => {
   try {

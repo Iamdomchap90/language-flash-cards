@@ -29,7 +29,7 @@ type FlashRowProps = {
 type FlashBoardProps = {
   data: VocabCardDocument[];
   updateNewCards: FilterCardsCallbackType;
-  activeButton: number | null;
+  activeButtonIndex: number | null;
   wordType: string | null;
 };
 
@@ -160,7 +160,7 @@ const FlashRow: React.FC<FlashRowProps> = ({
 const FlashBoard: React.FC<FlashBoardProps> = ({
   data,
   updateNewCards,
-  activeButton,
+  activeButtonIndex,
   wordType,
 }) => {
   const numberOfRows = 3;
@@ -201,15 +201,18 @@ const FlashBoard: React.FC<FlashBoardProps> = ({
   const newBoard = () => {
     setErrorCount(0);
     setAnswerCount(0);
-    updateNewCards(wordType, activeButton);
+    updateNewCards(wordType, activeButtonIndex);
   };
 
   const retryBoard = () => {
     setIsBoardReset(true);
+    setErrorCount(0);
+    setAnswerCount(0);
     setIsModalOpen(false);
   };
 
   useEffect(() => {
+    setIsBoardReset(false);
     if (isFirstRender) {
       // Exit early on the first render
       setIsFirstRender(false);

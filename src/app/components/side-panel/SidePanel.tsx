@@ -2,6 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import ToggleSwitch from '@/app/components/widgets/ToggleSwitch';
+import { FilterCardsCallbackType } from '@/types/callbacks';
+
+type FilterContainerProps = {
+  filterCards: FilterCardsCallbackType;
+  activeIndex: number | null;
+};
 
 const MatchConfig = () => {
   // Radio select for text entry, multiple choice
@@ -41,10 +47,13 @@ const MatchConfig = () => {
   );
 };
 
-const FilterContainer = ({ filterCards, activeIndex }) => {
+const FilterContainer: React.FC<FilterContainerProps> = ({
+  filterCards,
+  activeIndex,
+}) => {
   // Radio select for verbs, nouns, adjectives, adverbs
 
-  const handleFilterClick = (buttonIndex, wordType) => {
+  const handleFilterClick = (buttonIndex: number | null, wordType: string) => {
     filterCards(wordType, buttonIndex);
   };
 
@@ -89,7 +98,10 @@ const FilterContainer = ({ filterCards, activeIndex }) => {
   );
 };
 
-const SidePanel = ({ filterCards, activeIndex }) => {
+const SidePanel: React.FC<FilterContainerProps> = ({
+  filterCards,
+  activeIndex,
+}) => {
   return (
     <div className={styles.panelContainer}>
       <MatchConfig />

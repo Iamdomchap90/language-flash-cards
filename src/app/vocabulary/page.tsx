@@ -6,7 +6,7 @@ import styles from './page.module.css';
 import AuthArea from '@/app/components/auth-area/AuthArea';
 import { VocabCardDocument } from '@/types/models';
 
-const Vocabulary = () => {
+const Vocabulary: React.FC = () => {
   const [data, setData] = useState<VocabCardDocument[]>([]);
   const [isError, setIsError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -83,7 +83,7 @@ const Vocabulary = () => {
         <FlashBoard
           data={data}
           updateNewCards={fetchData}
-          buttonIndex={activeButtonIndex}
+          activeButtonIndex={activeButtonIndex}
           wordType={wordCategory}
         />
       </div>

@@ -1,0 +1,23 @@
+{
+  "HomePage": {
+    "title": "High Frequency Language Training",
+    "tagline": "The most direct way to start learning a new language.",
+    "vocabOption": "Vocabulary",
+    "statOption": "Statistics"
+  },
+  "VocabPage": {
+    "title": "Learn most commonly used words",
+    "errorPartOne": "error",
+    "errorPartTwo": "out of "
+  },
+  "NotFoundPage": {
+    "title": "Page Not Found"
+  },
+  "LoginPage": {
+    "title": "Log in",
+    "usernameLabel": "Username",
+    "passwordLabel": "Password",
+    "signupText": "Sign up",
+    "googleLogin": "Log in with Google"
+  }
+}

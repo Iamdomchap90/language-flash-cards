@@ -1,4 +1,5 @@
 import path from 'path';
+import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig = {
   reactStrictMode: true,
@@ -18,4 +19,7 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin();
+
+// Export the enhanced config
+export default withNextIntl(nextConfig);

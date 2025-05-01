@@ -4,6 +4,7 @@ import styles from './page.module.css';
 import { VocabCardDocument } from '@/types/models';
 import { FilterCardsCallbackType } from '@/types/callbacks';
 import { Types } from 'mongoose';
+import { useTranslations } from 'next-intl';
 
 type updateCardCallbackType = (
   cardIndex: number,
@@ -46,6 +47,9 @@ const FlashCard: React.FC<FlashCardProps> = ({
   const handleCardClick = () => {
     setIsZoomed(true);
   };
+
+  const t = useTranslations('FlashCard');
+
   const handleCheckAnswerClick = () => {
     const isCorrect = cardData.translationText === inputValue;
     const cardID = cardData._id;
@@ -75,17 +79,16 @@ const FlashCard: React.FC<FlashCardProps> = ({
         className={`${styles.answerButton} text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700`}
         onClick={handleCheckAnswerClick}
       >
-        Check answer
+        {t('checkAnswer')}
       </button>
     );
   } else if (isAnswerCorrect === true) {
-    feedbackMessage = (
-      <p className="feedbackText">Well done, correct answer!</p>
-    );
+    feedbackMessage = <p className="feedbackText">{t('correctMessage')}</p>;
   } else {
     feedbackMessage = (
       <p className="feedbackText">
-        Better luck next time. Correct answer is {cardData.translationText}.
+        {t('incorrectMessage')}
+        {cardData.translationText}.
       </p>
     );
   }
@@ -173,6 +176,8 @@ const FlashBoard: React.FC<FlashBoardProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFirstRender, setIsFirstRender] = useState(true);
 
+  const t = useTranslations('FlashBoard');
+
   const handleAnswerUpdate = async (
     cardIndex: number,
     cardID: Types.ObjectId,
@@ -225,7 +230,8 @@ const FlashBoard: React.FC<FlashBoardProps> = ({
     <>
       <div className={styles.errorDisplayContainer}>
         <div className={styles.errorDisplay}>
-          {errorCount} error{errorCount !== 1 && 's'} out of {answerCount}
+          {errorCount} {t('error', { count: errorCount })} {t('fraction')}
+          {answerCount}
         </div>
       </div>
       <div className={styles.boardContainer}>
@@ -261,14 +267,16 @@ const FlashBoard: React.FC<FlashBoardProps> = ({
           <div className="modal-content container grid h-[200px] mt-[30px] place-items-center">
             <h2 className="text-center header-text">Board complete!</h2>
             <p className="text-center long-text">
-              You scored {answerCount - errorCount} out of {answerCount}
+              {t('scoreMessage')}
+              {answerCount - errorCount} {t('fraction')}
+              {answerCount}
             </p>
             <div className="modalButtonContainer grid grid-cols-2 gap-4 text-center">
               <button className="btn bg-green-500" onClick={newBoard}>
-                Next Board
+                {t('next')}
               </button>
               <button className="btn bg-gray-500" onClick={retryBoard}>
-                Retry Board
+                {t('retry')}
               </button>
             </div>
           </div>

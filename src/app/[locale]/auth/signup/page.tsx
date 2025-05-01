@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export default function SignUp() {
   const [username, setUsername] = useState('');
@@ -12,18 +13,22 @@ export default function SignUp() {
   const [success, setSuccess] = useState(false);
   const emailRegex = /^\S+@\S+\.\S+$/;
 
+  const t = useTranslations('SigninPage');
+  const tl = useTranslations('Labels');
+  const errorTranslate = useTranslations('errors');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess(false);
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError(t('passwordError'));
       return;
     }
 
     if (emailError) {
-      setError('Give a valid email.');
+      setError(t('emailError'));
       return;
     }
 
@@ -37,15 +42,16 @@ export default function SignUp() {
       setSuccess(true);
     } else {
       const data = await response.json();
-      setError(data.error || 'An unexpected error occurred.');
+      console.log('DATA: ', data);
+      setError(data.error || errorTranslate('unexpected'));
     }
   };
 
-  const validateEmail = (dirtyEmail) => {
+  const validateEmail = (dirtyEmail: string) => {
     setEmail(dirtyEmail);
 
     if (!emailRegex.test(dirtyEmail)) {
-      setEmailError('Invalid email format');
+      setEmailError(errorTranslate('emailFormat'));
     } else {
       setEmailError('');
     }
@@ -53,10 +59,10 @@ export default function SignUp() {
 
   return (
     <div className="authContainer">
-      <h1 className="text-center mb-4 header-text">Sign Up</h1>
+      <h1 className="text-center mb-4 header-text">{t('title')}</h1>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col items-center formSpacing">
-          <label className="w-full block text-left">Username</label>
+          <label className="w-full block text-left">{tl('username')}</label>
           <input
             className="w-full input"
             type="text"
@@ -66,7 +72,7 @@ export default function SignUp() {
           />
         </div>
         <div className="flex flex-col items-center formSpacing">
-          <label className="w-full block text-left">Email</label>
+          <label className="w-full block text-left">{tl('email')}</label>
           <input
             className="w-full input"
             type="text"
@@ -79,7 +85,7 @@ export default function SignUp() {
           )}
         </div>
         <div className="flex flex-col items-center formSpacing">
-          <label className="w-full block text-left">Password</label>
+          <label className="w-full block text-left">{tl('password')}</label>
           <input
             className="w-full input"
             type="password"
@@ -89,7 +95,9 @@ export default function SignUp() {
           />
         </div>
         <div className="flex flex-col items-center formSpacing">
-          <label className="w-full block text-left">Confirm Password</label>
+          <label className="w-full block text-left">
+            {tl('confirmPassword')}
+          </label>
           <input
             className="w-full input"
             type="password"
@@ -100,7 +108,7 @@ export default function SignUp() {
         </div>
         <div className="formSpacing">
           <button className="btn" type="submit">
-            Sign Up
+            {t('title')}
           </button>
         </div>
       </form>
@@ -108,11 +116,11 @@ export default function SignUp() {
       {success && (
         <div className="modal ">
           <h2 className="mt-[90px] text-center header-text">
-            Sign-up successful! You can now log in.
+            {t('SignupMessage')}
           </h2>
           <div className="w-full formSpacing ">
             <Link href="/auth/login" className="btn">
-              Go to Log in
+              {t('loginPrompt')}
             </Link>
           </div>
         </div>

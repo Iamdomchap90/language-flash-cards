@@ -11,6 +11,7 @@ export default function LogIn() {
   const [password, setPassword] = useState('');
 
   const t = useTranslations('LoginPage');
+  const tl = useTranslations('Labels');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,7 +34,7 @@ export default function LogIn() {
       <h1 className="text-center mb-4 header-text">{t('title')}</h1>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col items-center formSpacing">
-          <label className="w-full block text-left">{t('usernameLabel')}</label>
+          <label className="w-full block text-left">{tl('username')}</label>
           <input
             className="w-full input"
             type="text"
@@ -43,7 +44,7 @@ export default function LogIn() {
           />
         </div>
         <div className="flex flex-col items-center formSpacing">
-          <label className="w-full block text-left">{t('passwordLabel')}</label>
+          <label className="w-full block text-left">{tl('password')}</label>
           <input
             className="w-full input"
             type="password"
@@ -59,7 +60,7 @@ export default function LogIn() {
         </div>
       </form>
 
-      <p className="my-5">Don't have an account?</p>
+      <p className="my-5">{t('signUpPrompt')}</p>
       <div className="flex justify-between px-10">
         <Link
           href="/auth/signup"

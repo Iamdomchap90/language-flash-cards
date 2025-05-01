@@ -4,7 +4,9 @@ import FlashBoard from '@/app/components/flash-cards/Flashcard';
 import SidePanel from '@/app/components/side-panel/SidePanel';
 import styles from './page.module.css';
 import AuthArea from '@/app/components/auth-area/AuthArea';
+import LangArea from '@/app/components/lang-setting-area/LangArea';
 import { VocabCardDocument } from '@/types/models';
+import { useTranslations } from 'next-intl';
 
 const Vocabulary: React.FC = () => {
   const [data, setData] = useState<VocabCardDocument[]>([]);
@@ -15,6 +17,9 @@ const Vocabulary: React.FC = () => {
   );
   const [hasMounted, setHasMounted] = useState<boolean>(false);
   const [wordCategory, setWordCategory] = useState<string | null>(null);
+
+  const t = useTranslations('VocabPage');
+  const te = useTranslations('errors');
 
   useEffect(() => {
     setHasMounted(true);
@@ -38,7 +43,7 @@ const Vocabulary: React.FC = () => {
 
         if (!response.ok) {
           let errorResponse = await response.json();
-          throw new Error(errorResponse.error || 'Failed to fetch data');
+          throw new Error(errorResponse.error || te('fetchData'));
         }
 
         const result = await response.json();
@@ -70,14 +75,15 @@ const Vocabulary: React.FC = () => {
   }
 
   if (isError) {
-    return <p>Something went wrong...</p>;
+    return <p>{te('unexpected')}...</p>;
   }
 
   return (
     <>
       <div className={`${styles.headContainer}`}>
-        <h1 className="header-text">Learn most commonly used words</h1>
+        <h1 className="header-text">{t('title')}</h1>
         <AuthArea />
+        <LangArea />
       </div>
       <div className={styles.boardContainer}>
         <FlashBoard

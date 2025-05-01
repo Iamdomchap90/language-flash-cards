@@ -1,0 +1,74 @@
+{
+  "HomePage": {
+    "title": "High Frequency Language Training",
+    "tagline": "The most direct way to start learning a new language.",
+    "vocabOption": "Vocabulary",
+    "statOption": "Statistics"
+  },
+  "VocabPage": {
+    "title": "Learn most commonly used words"
+  },
+  "NotFoundPage": {
+    "title": "Page Not Found"
+  },
+  "Labels": {
+    "username": "Username",
+    "password": "Password",
+    "email": "Email",
+    "confirmPassword": "Confirm Password"
+  },
+  "LoginPage": {
+    "title": "Log in",
+    "signUpPrompt": "Don't have an account?",
+    "signupText": "Sign up",
+    "googleLogin": "Log in with Google"
+  },
+  "SigninPage": {
+    "title": "Sign Up",
+    "usernameLabel": "Username",
+    "passwordLabel": "Password",
+    "passwordError": "Passwords do not match.",
+    "emailError": "Give a valid email.",
+    "SignupMessage": "Sign-up successful! You can now log in.",
+    "loginPrompt": "Go to Log in"
+  },
+  "errors": {
+    "unexpected": "An unexpected error occurred.",
+    "emailFormat": "Invalid email format",
+    "fetchData": "Failed to fetch data"
+  },
+  "AuthArea": {
+    "guest": "Guest user",
+    "signOut": "Sign out",
+    "signIn": "Sign in"
+  },
+  "LangArea": {
+    "language": "Language",
+    "english": "English",
+    "russian": "Russian"
+  },
+  "FlashCard": {
+    "checkAnswer": "Check answer",
+    "correctMessage": "Well done, correct answer!",
+    "incorrectMessage": "Better luck next time. Correct answer is "
+  },
+  "FlashBoard": {
+    "error": "{count, plural, one {error} many {errors} other {errors}}",
+    "fraction": "out of ",
+    "next": "Next Board",
+    "retry": "Retry Board",
+    "scoreMessage": "You scored "
+  },
+  "MatchConfig": {
+    "input": "Input method",
+    "text": "Text Entry",
+    "multipleChoice": "Multiple Choice"
+  },
+  "FilterContainer": {
+    "vocabularyFilter": "Vocabulary filter",
+    "nouns": "Nouns",
+    "verbs": "Verbs",
+    "adjectives": "Adjectives",
+    "adverbs": "Adverbs"
+  }
+}

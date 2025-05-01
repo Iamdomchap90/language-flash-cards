@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import ToggleSwitch from '@/app/components/widgets/ToggleSwitch';
 import { FilterCardsCallbackType } from '@/types/callbacks';
+import { useTranslations } from 'next-intl';
 
 type FilterContainerProps = {
   filterCards: FilterCardsCallbackType;
@@ -11,7 +12,7 @@ type FilterContainerProps = {
 
 const MatchConfig = () => {
   // Radio select for text entry, multiple choice
-
+  const t = useTranslations('MatchConfig');
   const [selectedConfig, setSelectedConfig] = useState<string>('text'); // Default selected Config
 
   const handleConfigChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,15 +24,15 @@ const MatchConfig = () => {
   return (
     <div className={styles.configContainer}>
       <div>
-        <h2 className="long-text">Input method</h2>
+        <h2 className="long-text">{t('input')}</h2>
       </div>
       <div>
         <ToggleSwitch
-          value="text"
+          value={'text'}
           isChecked={selectedConfig === 'text'}
           onConfigChange={handleConfigChange}
         >
-          Text Entry
+          {t('text')}
         </ToggleSwitch>
       </div>
       <div>
@@ -40,7 +41,7 @@ const MatchConfig = () => {
           isChecked={selectedConfig === 'multipleChoice'}
           onConfigChange={handleConfigChange}
         >
-          Multiple Choice
+          {t('multipleChoice')}
         </ToggleSwitch>
       </div>
     </div>
@@ -52,7 +53,7 @@ const FilterContainer: React.FC<FilterContainerProps> = ({
   activeIndex,
 }) => {
   // Radio select for verbs, nouns, adjectives, adverbs
-
+  const t = useTranslations('FilterContainer');
   const handleFilterClick = (buttonIndex: number | null, wordType: string) => {
     filterCards(wordType, buttonIndex);
   };
@@ -60,14 +61,14 @@ const FilterContainer: React.FC<FilterContainerProps> = ({
   return (
     <div className={styles.configContainer}>
       <div>
-        <h2 className="long-text">Vocabulary filter</h2>
+        <h2 className="long-text">{t('vocabularyFilter')}</h2>
       </div>
       <div>
         <button
           className={activeIndex === 0 ? 'btn activeBtn' : 'btn'}
           onClick={() => handleFilterClick(0, 'noun')}
         >
-          Nouns
+          {t('nouns')}
         </button>
       </div>
       <div>
@@ -75,7 +76,7 @@ const FilterContainer: React.FC<FilterContainerProps> = ({
           className={activeIndex === 1 ? 'btn activeBtn' : 'btn'}
           onClick={() => handleFilterClick(1, 'verb')}
         >
-          Verbs
+          {t('verbs')}
         </button>
       </div>
       <div>
@@ -83,7 +84,7 @@ const FilterContainer: React.FC<FilterContainerProps> = ({
           className={activeIndex === 2 ? 'btn activeBtn' : 'btn'}
           onClick={() => handleFilterClick(2, 'adjective')}
         >
-          Adjectives
+          {t('adjectives')}
         </button>
       </div>
       <div>
@@ -91,7 +92,7 @@ const FilterContainer: React.FC<FilterContainerProps> = ({
           className={activeIndex === 3 ? 'btn activeBtn' : 'btn'}
           onClick={() => handleFilterClick(3, 'adverb')}
         >
-          Adverbs
+          {t('adverbs')}
         </button>
       </div>
     </div>

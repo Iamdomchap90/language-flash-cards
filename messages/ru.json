@@ -1,0 +1,74 @@
+{
+  "HomePage": {
+    "title": "Обучение часто употребляемым словам",
+    "tagline": "Самый прямой способ начать изучать новый язык.",
+    "vocabOption": "Словарный запас",
+    "statOption": "Статистика"
+  },
+  "VocabPage": {
+    "title": "Изучайте наиболее часто используемые слова"
+  },
+  "NotFoundPage": {
+    "title": "Страница не найдена"
+  },
+  "Labels": {
+    "username": "Имя пользователя",
+    "password": "Пароль",
+    "email": "Электронная почта",
+    "confirmPassword": "Подтвердите пароль"
+  },
+  "LoginPage": {
+    "title": "Войти",
+    "signUpPrompt": "Нет аккаунта?",
+    "signupText": "Зарегистрироваться",
+    "googleLogin": "Войти через Google"
+  },
+  "SigninPage": {
+    "title": "Регистрация",
+    "usernameLabel": "Имя пользователя",
+    "passwordLabel": "Пароль",
+    "passwordError": "Пароли не совпадают.",
+    "emailError": "Укажите действительный адрес электронной почты.",
+    "SignupMessage": "Регистрация прошла успешно! Теперь вы можете войти.",
+    "loginPrompt": "Перейти ко входу"
+  },
+  "errors": {
+    "unexpected": "Произошла непредвиденная ошибка.",
+    "emailFormat": "Недопустимый формат электронной почты",
+    "fetchData": "Не удалось получить данные"
+  },
+  "AuthArea": {
+    "guest": "Гость",
+    "signOut": "Выйти",
+    "signIn": "Войти"
+  },
+  "LangArea": {
+    "language": "Язык",
+    "english": "Английский",
+    "russian": "Русский"
+  },
+  "FlashCard": {
+    "checkAnswer": "Проверить ответ",
+    "correctMessage": "Отлично, правильный ответ!",
+    "incorrectMessage": "Удачи в следующий раз. Правильный ответ — "
+  },
+  "FlashBoard": {
+    "error": "{count, plural, one {ошибка} few {ошибки} many {ошибок} other {ошибки}}",
+    "fraction": "из ",
+    "next": "Следующий набор",
+    "retry": "Повторить набор",
+    "scoreMessage": "Ваш результат: "
+  },
+  "MatchConfig": {
+    "input": "Способ ответа",
+    "text": "Ввод текста",
+    "multipleChoice": "Множественный выбор"
+  },
+  "FilterContainer": {
+    "vocabularyFilter": "Фильтр словаря",
+    "nouns": "Существительные",
+    "verbs": "Глаголы",
+    "adjectives": "Прилагательные",
+    "adverbs": "Наречия"
+  }
+}

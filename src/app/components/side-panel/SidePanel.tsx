@@ -55,6 +55,7 @@ const FilterContainer: React.FC<FilterContainerProps> = ({
   // Radio select for verbs, nouns, adjectives, adverbs
   const t = useTranslations('FilterContainer');
   const handleFilterClick = (buttonIndex: number | null, wordType: string) => {
+    console.log('WORD TYPE INSIDE FILTER CLICK: ', wordType);
     filterCards(wordType, buttonIndex);
   };
 

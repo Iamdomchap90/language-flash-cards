@@ -63,3 +63,10 @@ credential user will have a username where as google user will have just a name 
 to differentiate between the two objects in shared space.
 
 The oAuth accounts will have a mongo db reference in the database also to help cache their stats whilst learning. This is created/retrieved in the utils/authOptions file.
+
+# Lang options
+
+There are two distinct configurations for language:
+
+1. The global UI language determined in the LangArea component. This will simply render all html text across the site in the specified language. With the exception of 2.
+2. The board card display language. This will function independently of 1 e.g. A user can read the menu options in Russian but see the initial card state as english or Russian (independent of locale set).

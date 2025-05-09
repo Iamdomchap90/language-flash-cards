@@ -17,6 +17,7 @@ type FlashCardProps = {
   cardIndex: number;
   onAnswerUpdate: updateCardCallbackType;
   isBoardReset: boolean;
+  cardLang: string;
 };
 
 type FlashRowProps = {
@@ -25,12 +26,14 @@ type FlashRowProps = {
   onAnswerUpdate: updateCardCallbackType;
   numCardsPerRow: number;
   isBoardReset: boolean;
+  rowLang: string;
 };
 
 type FlashBoardProps = {
   data: VocabCardDocument[];
   updateNewCards: FilterCardsCallbackType;
   activeButtonIndex: number | null;
+  boardLang: string;
   wordType: string | null;
 };
 
@@ -39,27 +42,33 @@ const FlashCard: React.FC<FlashCardProps> = ({
   cardIndex,
   onAnswerUpdate,
   isBoardReset,
+  cardLang,
 }) => {
-  const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const [isZoomed, setIsZoomed] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
   const handleCardClick = () => {
     setIsZoomed(true);
   };
+  let displayText;
+  let answerText;
+
+  if (cardLang !== 'en') {
+    displayText = cardData.translationText;
+    answerText = cardData.englishText;
+  } else {
+    displayText = cardData.englishText;
+    answerText = cardData.translationText;
+  }
 
   const t = useTranslations('FlashCard');
 
   const handleCheckAnswerClick = () => {
-    const isCorrect = cardData.translationText === inputValue;
+    const isCorrect = answerText === inputValue;
     const cardID = cardData._id;
     setIsAnswerCorrect(isCorrect);
     onAnswerUpdate(cardIndex, cardID, isCorrect);
   };
-
-  const displayText = isFlipped
-    ? cardData.translationText
-    : cardData.englishText;
 
   useEffect(() => {
     if (isBoardReset) {
@@ -88,7 +97,7 @@ const FlashCard: React.FC<FlashCardProps> = ({
     feedbackMessage = (
       <p className="feedbackText">
         {t('incorrectMessage')}
-        {cardData.translationText}.
+        {answerText}.
       </p>
     );
   }
@@ -141,6 +150,7 @@ const FlashRow: React.FC<FlashRowProps> = ({
   onAnswerUpdate,
   numCardsPerRow,
   isBoardReset,
+  rowLang,
 }) => {
   return (
     <div className={styles.boardRowContainer}>
@@ -153,6 +163,7 @@ const FlashRow: React.FC<FlashRowProps> = ({
             cardIndex={cardIdentifier}
             onAnswerUpdate={onAnswerUpdate}
             isBoardReset={isBoardReset}
+            cardLang={rowLang}
           />
         );
       })}
@@ -164,6 +175,7 @@ const FlashBoard: React.FC<FlashBoardProps> = ({
   data,
   updateNewCards,
   activeButtonIndex,
+  boardLang,
   wordType,
 }) => {
   const numberOfRows = 3;
@@ -199,7 +211,7 @@ const FlashBoard: React.FC<FlashBoardProps> = ({
       setErrorCount(Number(errorCount) + Number(!isCorrect));
       setAnswerCount(Number(answerCount) + 1);
     } catch (err) {
-      console.log('Error: ', err);
+      console.error(err);
     }
   };
 
@@ -247,6 +259,7 @@ const FlashBoard: React.FC<FlashBoardProps> = ({
               onAnswerUpdate={handleAnswerUpdate}
               numCardsPerRow={numberOfColumns}
               isBoardReset={isBoardReset}
+              rowLang={boardLang}
             />
           );
         })}

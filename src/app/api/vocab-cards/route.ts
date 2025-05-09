@@ -4,15 +4,20 @@ import VocabCard from '@/models/VocabCard';
 import UserVocabCardProgress from '@/models/UserVocabCardProgress';
 import { getUserID } from '@/utils/user';
 import mongoose, { FilterQuery } from 'mongoose';
-import { IVocabCard } from '@/types/models';
+import { IVocabCard, VocabCardDocument } from '@/types/models';
+
+interface filterType {
+  language: string;
+  wordType?: string;
+  user?: mongoose.Types.ObjectId;
+  nextReviewedAt?: Date;
+}
 
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    console.log('VOCAB CARDS HIT!');
     const { searchParams } = new URL(request.url);
     const wordType = searchParams.get('wordType');
-    let baseFilter = { language: 'Russian' };
-
+    let baseFilter: filterType = { language: 'Russian' };
     if (wordType) {
       baseFilter['wordType'] = wordType;
     }

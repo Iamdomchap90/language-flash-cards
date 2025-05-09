@@ -120,7 +120,7 @@ const updateUserStats = async (
     user = updateThirtyDayActivity(user);
     user.save();
   } catch (err) {
-    console.log('ERROR: ', err);
+    console.error(err);
   }
 };
 

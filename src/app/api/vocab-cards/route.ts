@@ -18,9 +18,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     const { searchParams } = new URL(request.url);
     const wordType = searchParams.get('wordType');
     let baseFilter: filterType = { language: 'Russian' };
-    console.log('WORD TYPE: ', wordType);
     if (wordType) {
-      console.log('HIT WITH: ', wordType);
       baseFilter['wordType'] = wordType;
     }
 

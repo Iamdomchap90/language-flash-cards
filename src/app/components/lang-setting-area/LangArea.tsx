@@ -5,7 +5,6 @@ import { TwoLabelToggleSwitch } from '@/app/components/widgets/ToggleSwitch';
 import { usePathname, useRouter } from 'next/navigation'; // or 'next/router' for older apps
 
 const getPathname = (pathWithLocale: string) => {
-  console.log(pathWithLocale.replace(/^\/[^/]+/, ''));
   return pathWithLocale.replace(/^\/[^/]+/, '');
 };
 
@@ -30,12 +29,9 @@ const LangArea: React.FC = () => {
       hasMounted.current = true;
       return;
     }
-    console.log(`this /${lang}${pathname}`);
     router.push(`/${lang}${pathname}`);
     setOptions({ en: t('english'), ru: t('russian') });
   }, [lang]);
-
-  React;
 
   return (
     <div className="w-[16.67vw]">

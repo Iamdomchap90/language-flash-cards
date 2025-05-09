@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import FlashBoard from '@/app/components/flash-cards/Flashcard';
 import SidePanel from '@/app/components/side-panel/SidePanel';
 import styles from './page.module.css';
@@ -7,8 +7,12 @@ import AuthArea from '@/app/components/auth-area/AuthArea';
 import LangArea from '@/app/components/lang-setting-area/LangArea';
 import { VocabCardDocument } from '@/types/models';
 import { useTranslations } from 'next-intl';
-import LangCode from '@/types/languages';
+import LangCode, { isLangCode } from '@/types/languages';
 import { TwoLabelToggleSwitch } from '@/app/components/widgets/ToggleSwitch';
+import { usePathname } from 'next/navigation';
+
+const getPathWithoutLocal = (path: string): string =>
+  path.replace(/^\/[a-z]{2}(\/|$)/, '/');
 
 const Vocabulary: React.FC = () => {
   const [data, setData] = useState<VocabCardDocument[]>([]);
@@ -17,19 +21,41 @@ const Vocabulary: React.FC = () => {
   const [activeButtonIndex, setActiveButtonIndex] = useState<number | null>(
     null
   );
-  const [hasMounted, setHasMounted] = useState<boolean>(false);
+  const hasMounted = useRef<boolean>(false);
   const [wordCategory, setWordCategory] = useState<string | null>(null);
-  const [displayLang, setDisplayLang] = useState<LangCode>('en');
+
+  const storedLang = localStorage.getItem('boardDisplayLang');
+  const initialLang = storedLang && isLangCode(storedLang) ? storedLang : 'en';
+  const [displayLang, setDisplayLang] = useState<LangCode>(initialLang);
+
   const [options, setOptions] = React.useState({
     en: 'English',
     ru: 'Russian',
   });
+  const prevPath = useRef<string>(localStorage.getItem('prevPath') || '');
+  const currPath = usePathname();
 
   const t = useTranslations('VocabPage');
   const te = useTranslations('errors');
 
   useEffect(() => {
-    setHasMounted(true);
+    // Card display language change will always fetch new data to avoid cheating.
+    if (!hasMounted.current) return;
+    fetchData();
+  }, [displayLang]);
+
+  useEffect(() => {
+    // Use cached vocab card data only if the locale has changed (or page reload)
+    const cachedData = localStorage.getItem('flashcards');
+    const strippedPrevPath = getPathWithoutLocal(prevPath.current);
+    const strippedCurrPath = getPathWithoutLocal(currPath);
+    if (cachedData && strippedPrevPath === strippedCurrPath) {
+      setData(JSON.parse(cachedData));
+    } else if (strippedPrevPath !== strippedCurrPath) {
+      fetchData();
+    }
+    localStorage.setItem('prevPath', currPath);
+    hasMounted.current = true;
   }, []);
 
   const fetchData = useCallback(
@@ -55,6 +81,7 @@ const Vocabulary: React.FC = () => {
 
         const result = await response.json();
         setData(result);
+        localStorage.setItem('flashcards', JSON.stringify(result));
         setActiveButtonIndex(buttonIndex);
         setWordCategory(lexicalCategory);
       } catch (error) {
@@ -67,17 +94,13 @@ const Vocabulary: React.FC = () => {
     []
   );
 
-  useEffect(() => {
-    fetchData();
-  }, [displayLang]);
-
   const onLangChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDisplayLang((prevLang) => (prevLang === 'en' ? 'ru' : 'en'));
+    const newLang = displayLang === 'en' ? 'ru' : 'en';
+    setDisplayLang(newLang);
+    localStorage.setItem('boardDisplayLang', newLang);
   };
 
-  const handleNextCards = () => {};
-
-  if (!hasMounted) {
+  if (!hasMounted.current) {
     return <p>Loading...</p>; // Prevents rendering mismatched content
   }
 

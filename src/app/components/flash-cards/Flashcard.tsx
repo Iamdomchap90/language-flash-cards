@@ -64,7 +64,6 @@ const FlashCard: React.FC<FlashCardProps> = ({
   const t = useTranslations('FlashCard');
 
   const handleCheckAnswerClick = () => {
-    console.log('ANSWER TEXT: ', answerText);
     const isCorrect = answerText === inputValue;
     const cardID = cardData._id;
     setIsAnswerCorrect(isCorrect);
@@ -212,7 +211,7 @@ const FlashBoard: React.FC<FlashBoardProps> = ({
       setErrorCount(Number(errorCount) + Number(!isCorrect));
       setAnswerCount(Number(answerCount) + 1);
     } catch (err) {
-      console.log('Error: ', err);
+      console.error(err);
     }
   };
 

@@ -42,7 +42,6 @@ export default function SignUp() {
       setSuccess(true);
     } else {
       const data = await response.json();
-      console.log('DATA: ', data);
       setError(data.error || errorTranslate('unexpected'));
     }
   };

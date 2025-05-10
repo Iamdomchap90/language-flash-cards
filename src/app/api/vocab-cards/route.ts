@@ -13,6 +13,19 @@ interface filterType {
   nextReviewedAt?: Date;
 }
 
+const getUserCards = (
+  spacedRepetitionCards: VocabCardDocument[],  newCards: VocabCardDocument[],
+  spacedRepetitionLimit: number = 4, totalLimit: number = 9,
+): VocabCardDocument[] => {
+  // Fetches upto the Spaced Repetition Limit on corresponding cards with 
+  // remainder being un-attempted cards.
+  const spacedRepetitionCardCount = spacedRepetitionCards.length;
+  spacedRepetitionLimit = (spacedRepetitionCardCount < spacedRepetitionLimit)? spacedRepetitionCardCount:  spacedRepetitionLimit; 
+  const spacedRepetitionList = spacedRepetitionCards.slice(0, spacedRepetitionLimit);
+  const NewList = newCards.slice(0, totalLimit - spacedRepetitionLimit);
+  return [...spacedRepetitionList, ...NewList].sort(() => Math.random() - 0.5);
+}
+
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const { searchParams } = new URL(request.url);
@@ -76,11 +89,9 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         },
       });
 
-      const reviewableVocabCards = [
-        ...spacedRepetitionVocabCards,
-        ...notAttemptedVocabCards,
-      ];
-      return new NextResponse(JSON.stringify(reviewableVocabCards), {
+      const userVocabCards = getUserCards(spacedRepetitionVocabCards, notAttemptedVocabCards);
+      
+      return new NextResponse(JSON.stringify(userVocabCards), {
         status: 200,
       });
     }

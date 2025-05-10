@@ -65,7 +65,7 @@ const Vocabulary: React.FC = () => {
     ): Promise<void> => {
       setIsLoading(true);
       setIsError(false);
-
+  
       try {
         const lexicalCategoryParameter = lexicalCategory
           ? `?wordType=${lexicalCategory}`

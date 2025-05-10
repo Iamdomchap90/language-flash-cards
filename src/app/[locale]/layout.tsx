@@ -8,6 +8,7 @@ import { getServerSession } from 'next-auth';
 import NotFound from './not-found';
 import SessionProvider from '@/app/components/session/SessionProvider'; // adjusted path
 import { routing } from '@/i18n/route';
+import LangCode from '@/types/languages';
 
 export const metadata = {
   title: 'Create Next App',
@@ -16,7 +17,7 @@ export const metadata = {
 
 interface RootLayoutProps {
   children: ReactNode;
-  params: { locale: string };
+  params: { locale: LangCode };
 }
 
 const RootLayout = async ({

@@ -240,7 +240,7 @@ const FlashBoard: React.FC<FlashBoardProps> = ({
 
   return (
     <>
-      <div className={styles.errorDisplayContainer}>
+      <div className={styles.errorDisplayContainer} data-testid="error-display">
         <div className={styles.errorDisplay}>
           {errorCount} {t('error', { count: errorCount })} {t('fraction')}
           {answerCount}

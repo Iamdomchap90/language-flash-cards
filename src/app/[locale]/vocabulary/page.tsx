@@ -65,7 +65,7 @@ const Vocabulary: React.FC = () => {
     ): Promise<void> => {
       setIsLoading(true);
       setIsError(false);
-  
+
       try {
         const lexicalCategoryParameter = lexicalCategory
           ? `?wordType=${lexicalCategory}`
@@ -100,12 +100,8 @@ const Vocabulary: React.FC = () => {
     localStorage.setItem('boardDisplayLang', newLang);
   };
 
-  if (!hasMounted.current) {
-    return <p>Loading...</p>; // Prevents rendering mismatched content
-  }
-
-  if (isLoading) {
-    return <p>Loading vocabulary...</p>;
+  if (isLoading || !hasMounted.current) {
+    return <p data-testid="loading-screen">Loading vocabulary...</p>;
   }
 
   if (isError) {

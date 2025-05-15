@@ -2,7 +2,7 @@ import path from 'path';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   webpack: (config, { isServer }) => {
     // Add a rule to handle .node files
     config.module.rules.push({

@@ -1,5 +1,11 @@
 {
-  "extends": ["next", "next/core-web-vitals", "plugin:prettier/recommended"],
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "plugin:prettier/recommended",
+    "plugin:test-library/react",
+    "plugin:jest-dom/recommended"
+  ],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-unused-vars": "off",

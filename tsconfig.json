@@ -10,6 +10,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
+    "types": ["jest", "jest-fetch-mock"],
     "paths": {
       "@/*": ["./src/*"]
     },
@@ -30,7 +31,8 @@
     "**/*.tsx",
     "types/**/*.d.ts",
     ".next/types/**/*.ts",
-    "next.config.js"
+    "next.config.js",
+    "jest.config.js"
   ],
   "exclude": ["node_modules", ".next"]
 }
